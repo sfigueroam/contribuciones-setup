@@ -35,10 +35,10 @@ variable "cPipelineBucket" {
 locals {
   serviceNameParam        = "ws-tierra"
   localPrefix             = "tgr-${var.env}-${var.appName}"
-  cBuildRoleServerless    = "arn:aws:iam::${var.account}:role/tgr-prod-project-setup-codebuild"
-  cBuildRoleAngular       = "arn:aws:iam::${var.account}:role/tgr-prod-project-setup-codebuild"
-  cPipelineRoleServerless = "arn:aws:iam::${var.account}:role/tgr-prod-project-setup-codepipeline"
-  cPipelineRoleAngular    = "arn:aws:iam::${var.account}:role/tgr-prod-project-setup-codepipeline"
+  cBuildRoleServerless    = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
+  cBuildRoleAngular       = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
+  cPipelineRoleServerless = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
+  cPipelineRoleAngular    = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
 }
 
 module "permission_role" {
