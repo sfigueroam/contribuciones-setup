@@ -1,6 +1,0 @@
-account             = "604753321405"
-env                 = "prod" 
-appName             = "contribuciones"
-kmsKey              = "arn:aws:kms:us-east-1:596659627869:key/e235f062-aa51-44e1-a4fe-339ede7dac2c"
-repositoryName      = "repositoryName"
-cPipelineBucket     = "cPipelineBucket"

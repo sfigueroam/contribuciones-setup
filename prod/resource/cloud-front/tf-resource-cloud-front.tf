@@ -1,6 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
 variable "appName" {
   type = "string"
 }
@@ -22,7 +19,7 @@ resource "aws_cloudfront_distribution" "cfront_s3_dist_front" {
     domain_name = "${var.bucketDomainName}"
     origin_id   = "${local.s3_origin_id}"
   }
-  enabled             = false
+  enabled             = true
   is_ipv6_enabled     = true
   price_class = "PriceClass_All"
 

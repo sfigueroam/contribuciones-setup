@@ -66,6 +66,9 @@ output "out_s3_bucket_parse_name" {
 output "out_s3_bucket_token_name" {
   value = "${aws_s3_bucket.s3_bucket_token.id}"
 }
+output "out_s3_bucket_front_name" {
+  value = "${aws_s3_bucket.s3_bucket_front.id}"
+}
 output "out_s3_bucket_front_domain_name" {
   value = "${aws_s3_bucket.s3_bucket_front.bucket_domain_name}"
 }

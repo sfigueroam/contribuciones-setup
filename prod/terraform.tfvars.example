@@ -1,0 +1,7 @@
+account             	= "604753321405"
+env                 	= "prod" 
+appName             	= "contribuciones"
+kmsKey              	= "arn:aws:kms:us-east-1:604753321405:key/xxxxxxx-xxxx-xxxx-xxxxxxx-xxxxxxxxxx"
+repositoryServerless   	= "codecommit-repository-serverless"
+repositoryAngular   	= "codecommit-repository-angular"
+cPipelineBucket     	= "codepipeline-bucket"

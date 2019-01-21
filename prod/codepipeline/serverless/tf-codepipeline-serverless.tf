@@ -25,6 +25,13 @@ variable "cPipelineRole" {
 variable "cPipelineBucket" {
   type        = "string"
 }
+variable "apiGatewayID" {
+  type        = "string"
+}
+variable "apiGatewayRootID" {
+  type        = "string"
+}
+
 variable "branch" {
   type    = "map"
   default = {
@@ -54,11 +61,20 @@ resource "aws_codebuild_project" "cbuild_project_serverless" {
     environment_variable {
       name  =  "BUILD_ENV"
       value =  "${var.env}"
-      }
+    }
     environment_variable {
       name  =  "BUILD_ROLE"
       value =  "${var.roleArn}"
-      }
+    }
+    environment_variable {
+      name  =  "API_ID"
+      value =  "${var.apiGatewayID}"
+    }
+    environment_variable {
+      name  =  "API_ROOT_ID"
+      value =  "${var.apiGatewayRootID}"
+    }
+
   }
 
   source {

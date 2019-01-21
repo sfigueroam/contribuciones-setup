@@ -18,7 +18,7 @@ resource "aws_iam_role" "role_lambda" {
   assume_role_policy = "${data.aws_iam_policy_document.data_role_lambda.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "role_lambda_attachment_dyndb" {
+resource "aws_iam_role_policy_attachment" "role_lambda_attachment" {
   role       = "${aws_iam_role.role_lambda.name}"
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   depends_on = ["aws_iam_role.role_lambda"]
