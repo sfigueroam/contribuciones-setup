@@ -116,6 +116,17 @@ module "codepipeline_angular" {
   cPipelineBucket   = "${var.cPipelineBucket}"
 }
 
+/*
+module "resource_cloud_front" {
+  source              = "./resource/cloud-front"
+  appName             = "${var.appName}"
+  env                 = "${var.env}"
+  bucketName          = "${module.resource_s3.out_s3_bucket_front_name}"
+  bucketDomainName    = "${module.resource_s3.out_s3_bucket_front_domain_name}"
+}
+*/
+
+
 terraform {
   backend "s3" {
 	  encrypt = false

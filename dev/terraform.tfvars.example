@@ -1,0 +1,7 @@
+account             	= "080540609156"
+env                 	= "dev"
+appName             	= "contribuciones"
+appFrontSubdomain       = "ddrr"
+appFrontDomain          = "tegere.info"
+route53ZoneId           = "Z3LEVMOFICGIN3"
+acmCertificateArn       = "arn:aws:acm:us-east-1:080540609156:certificate/af13e4c6-dce2-4d15-897e-39e9be4bbc1f"
