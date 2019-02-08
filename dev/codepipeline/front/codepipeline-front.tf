@@ -53,6 +53,7 @@ variable "branch" {
   default = {
     "prod" = "master"
     "dev" = "develop"
+    "qa" = "release"
   }
 }
 
