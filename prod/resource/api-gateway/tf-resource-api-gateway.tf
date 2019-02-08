@@ -1,9 +1,9 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
 resource "aws_api_gateway_rest_api" "api_gateway_back" {
-  name = "${var.prefix}-back"
+  name = "${var.appPrefix}-back"
 
   endpoint_configuration {
     types = ["REGIONAL"]

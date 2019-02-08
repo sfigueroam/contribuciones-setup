@@ -1,16 +1,16 @@
-variable "prefix" {
-  type        = "string"
+variable "appPrefix" {
+  type = "string"
 }
 variable "appName" {
-  type        = "string"
+  type = "string"
 }
 variable "env" {
-  type        = "string"
+  type = "string"
 }
 
 resource "aws_s3_bucket" "s3_bucket_front" {
-  bucket  = "${var.prefix}-front"
-  acl     = "private"
+  bucket = "${var.appPrefix}-front"
+  acl = "public-read"
   versioning {
     enabled = false
   }
@@ -20,55 +20,47 @@ resource "aws_s3_bucket" "s3_bucket_front" {
   }
   tags = {
     Application = "${var.appName}"
-	  Env         = "${var.env}"
+    Env = "${var.env}"
   }
 }
 
 resource "aws_s3_bucket" "s3_bucket_direcciones" {
-  bucket  = "${var.prefix}-direcciones"
-  acl     = "private"
+  bucket = "${var.appPrefix}-direcciones-esloader"
+  acl = "private"
   versioning {
     enabled = false
   }
   tags = {
     Application = "${var.appName}"
-	  Env         = "${var.env}"
+    Env = "${var.env}"
   }
 }
 
 resource "aws_s3_bucket" "s3_bucket_parse" {
-  bucket  = "${var.prefix}-parse"
+  bucket = "${var.appPrefix}-parse"
+  acl = "private"
+  versioning {
+    enabled = false
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_s3_bucket" "s3_bucket_tokens" {
+  bucket  = "${var.appPrefix}-tokens"
   acl     = "private"
   versioning {
     enabled = false
   }
   tags = {
     Application = "${var.appName}"
-	  Env         = "${var.env}"
+    Env         = "${var.env}"
   }
 }
 
-resource "aws_s3_bucket" "s3_bucket_token" {
-  bucket  = "${var.prefix}-token"
-  acl     = "private"
-  versioning {
-    enabled = false
-  }
-  tags = {
-    Application = "${var.appName}"
-	  Env         = "${var.env}"
-  }
+output "out_s3_bucket_direcciones_name" {
+  value = "${aws_s3_bucket.s3_bucket_direcciones.id}"
 }
 
-output "out_s3_bucket_parse_name" {
-  value = "${aws_s3_bucket.s3_bucket_parse.id}"
-}
-output "out_s3_bucket_token_name" {
-  value = "${aws_s3_bucket.s3_bucket_token.id}"
-}
-output "out_s3_bucket_front_name" {
-  value = "${aws_s3_bucket.s3_bucket_front.id}"
-}
-output "out_s3_bucket_front_domain_name" {
-  value = "${aws_s3_bucket.s3_bucket_front.bucket_domain_name}"
-}
