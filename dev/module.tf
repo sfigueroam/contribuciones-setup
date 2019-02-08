@@ -40,6 +40,10 @@ variable "cognitoPoolId" {
   type = "string"
 }
 
+variable "cognitoAuthorizeURL" {
+  type = "string"
+}
+
 variable "cognitoProviders" {
   type = "list"
 }
@@ -143,6 +147,9 @@ module "codepipeline_front" {
   bucket-front-id = "${module.s3-bucket-front.id}"
   endpoint-api-elasticsearch = "${var.endpoint-api-elasticsearch}"
   endpoint-api-publica = "${var.endpoint-api-publica}"
+  cognitoAuthorizeURL = "${var.cognitoAuthorizeURL}"
+  cognitoContribClientId = "${module.cognito_app-clients.contrib-client-id}"
+  cognitoContribRedirectURI = "${module.cognito_app-clients.contrib-redirect-uri}"
 }
 
 terraform {

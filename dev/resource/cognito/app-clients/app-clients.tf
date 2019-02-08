@@ -84,3 +84,11 @@ resource "aws_cognito_user_pool_client" "cuenta_client" {
   #  "custom:clave-unica:run",
   #  "custom:clave-unica:name"]
 }
+
+output "contrib-client-id" {
+  value = "${aws_cognito_user_pool_client.contribuciones_client.id}"
+}
+
+output "contrib-redirect-uri" {
+  value = "${aws_cognito_user_pool_client.contribuciones_client.callback_urls[0]}"
+}

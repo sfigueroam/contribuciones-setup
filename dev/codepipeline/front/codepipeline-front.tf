@@ -36,6 +36,18 @@ variable "endpoint-api-publica" {
   type = "string"
 }
 
+variable "cognitoAuthorizeURL" {
+  type = "string"
+}
+
+variable "cognitoContribClientId" {
+  type = "string"
+}
+
+variable "cognitoContribRedirectURI" {
+  type = "string"
+}
+
 variable "branch" {
   type = "map"
   default = {
@@ -78,9 +90,39 @@ resource "aws_codebuild_project" "cbuild_proyect_angular" {
     }
 
     environment_variable {
+      name = "BUILD_ENDPOINT_API_PRIVADA"
+      value = "${var.endpoint-api-publica}"
+    }
+
+    environment_variable {
       name = "BUILD_URL_BOTON_PAGO_TGR"
       value = "/tgr/${var.env}/${var.appName}/front/url-pago-tgr"
       type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_URL_AUTHORIZE"
+      value = "${var.cognitoAuthorizeURL}"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_CLIENT_ID_1"
+      value = "${var.cognitoContribClientId}"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_CLIENT_REDIRECT_URI_1"
+      value = "${var.cognitoContribRedirectURI}"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_CLIENT_ID_2"
+      value = "${var.cognitoContribClientId}"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_CLIENT_REDIRECT_URI_2"
+      value = "${var.cognitoContribRedirectURI}"
     }
   }
 
@@ -95,7 +137,7 @@ resource "aws_codebuild_project" "cbuild_proyect_angular" {
 
 }
 
-resource "aws_codepipeline" "cpipeline_proyect_angular" {
+resource "aws_codepipeline" "cpipeline_front" {
   name = "${var.prefix}-front"
   role_arn = "${var.cPipelineRole}"
 
