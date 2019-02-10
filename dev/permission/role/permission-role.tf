@@ -23,6 +23,11 @@ variable "cloudwatchPolicy" {
   type = "string"
 }
 
+
+variable "s3Policy" {
+  type = "string"
+}
+
 data "aws_iam_policy_document" "data_role_lambda" {
   statement {
     actions = [
@@ -66,6 +71,13 @@ resource "aws_iam_role_policy_attachment" "role_lambda_attachment_cloudwatch" {
     "aws_iam_role.role_lambda"]
 }
 
-output "out_arn_role_lambda" {
+resource "aws_iam_role_policy_attachment" "role_lambda_attachment_s3" {
+  role = "${aws_iam_role.role_lambda.name}"
+  policy_arn = "${var.s3Policy}"
+  depends_on = [
+    "aws_iam_role.role_lambda"]
+}
+
+output "lambdaRoleArn" {
   value = "${aws_iam_role.role_lambda.arn}"
 }

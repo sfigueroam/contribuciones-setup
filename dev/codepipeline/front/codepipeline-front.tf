@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 variable "appName" {
@@ -58,7 +58,7 @@ variable "branch" {
 }
 
 resource "aws_codebuild_project" "cbuild_proyect_angular" {
-  name = "${var.prefix}-front"
+  name = "${var.appPrefix}-front"
   build_timeout = "15"
   service_role = "${var.cBuildRole}"
 
@@ -139,7 +139,7 @@ resource "aws_codebuild_project" "cbuild_proyect_angular" {
 }
 
 resource "aws_codepipeline" "cpipeline_front" {
-  name = "${var.prefix}-front"
+  name = "${var.appPrefix}-front"
   role_arn = "${var.cPipelineRole}"
 
   stage {

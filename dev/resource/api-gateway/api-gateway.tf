@@ -2,6 +2,14 @@ variable "appPrefix" {
   type = "string"
 }
 
+variable "region" {
+  type = "string"
+}
+
+variable "env" {
+  type = "string"
+}
+
 resource "aws_api_gateway_rest_api" "api_gateway_back" {
   name = "${var.appPrefix}-back"
 
@@ -10,10 +18,14 @@ resource "aws_api_gateway_rest_api" "api_gateway_back" {
   }
 }
 
-output "out_api_gateway_id" {
+output "apiGatewayId" {
   value = "${aws_api_gateway_rest_api.api_gateway_back.id}"
 }
 
-output "out_api_gateway_root_id" {
+output "apiGatewayRootId" {
   value = "${aws_api_gateway_rest_api.api_gateway_back.root_resource_id}"
+}
+
+output "endpoint" {
+  value = "https://${aws_api_gateway_rest_api.api_gateway_back.id}.execute-api.${var.region}.amazonaws.com/${var.env}"
 }

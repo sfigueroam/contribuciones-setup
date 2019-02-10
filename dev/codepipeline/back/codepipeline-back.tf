@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 variable "appName" {
@@ -32,6 +32,14 @@ variable "apiGatewayRootID" {
   type = "string"
 }
 
+variable "lambdaRoleArn" {
+  type = "string"
+}
+
+variable "bucketTokens" {
+  type = "string"
+}
+
 variable "branch" {
   type = "map"
   default = {
@@ -41,8 +49,16 @@ variable "branch" {
   }
 }
 
-resource "aws_codebuild_project" "cbuild_project_back" {
-  name = "${var.prefix}-back"
+variable "bucketParse" {
+  type = "string"
+}
+
+variable "cognitoPoolArn" {
+  type = "string"
+}
+
+resource "aws_codebuild_project" "cbuild-project-back" {
+  name = "${var.appPrefix}-back"
   build_timeout = "15"
   service_role = "${var.cBuildRole}"
 
@@ -63,19 +79,72 @@ resource "aws_codebuild_project" "cbuild_project_back" {
       name = "BUILD_ENV"
       value = "${var.env}"
     }
+
     environment_variable {
-      name = "BUILD_ROLE"
-      value = "${var.roleArn}"
+      name = "BUILD_LAMBDA_ROLE_ARN"
+      value = "${var.lambdaRoleArn}"
     }
+
     environment_variable {
-      name = "API_ID"
+      name = "BUILD_BUCKET_TOKENS"
+      value = "${var.bucketTokens}"
+    }
+
+    environment_variable {
+      name = "BUILD_BUCKET_PARSE"
+      value = "${var.bucketParse}"
+    }
+
+    environment_variable {
+      name = "BUILD_COGNITO_POOL_ARN"
+      value = "${var.cognitoPoolArn}"
+    }
+
+    environment_variable {
+      name = "BUILD_API_ID"
       value = "${var.apiGatewayID}"
     }
+
     environment_variable {
-      name = "API_ROOT_ID"
+      name = "BUILD_API_ROOT_ID"
       value = "${var.apiGatewayRootID}"
     }
 
+    environment_variable {
+      name = "BUILD_WST_GRANT_TYPE"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/grant-type"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_WST_CLIENT_SECRET"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/client-secret"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_WST_CLIENT_ID"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/client-id"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_WST_SCOPE"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/scope"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_WST_HOST"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/host"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_WST_PORT"
+      value = "/tgr/dev/contribuciones/back/ws-tierra/port"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {
@@ -90,7 +159,7 @@ resource "aws_codebuild_project" "cbuild_project_back" {
 }
 
 resource "aws_codepipeline" "cpipeline_project_serverless" {
-  name = "${var.prefix}-back"
+  name = "${var.appPrefix}-back"
   role_arn = "${var.cPipelineRole}"
 
   stage {
@@ -126,7 +195,7 @@ resource "aws_codepipeline" "cpipeline_project_serverless" {
         "SourceArtifact"]
 
       configuration {
-        ProjectName = "${aws_codebuild_project.cbuild_project_back.name}"
+        ProjectName = "${aws_codebuild_project.cbuild-project-back.name}"
       }
     }
   }

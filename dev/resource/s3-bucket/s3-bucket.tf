@@ -62,10 +62,30 @@ resource "aws_s3_bucket" "s3_bucket_tokens" {
   }
 }
 
-output "s3-bucket-front-website-endpoint" {
+output "website-endpoint" {
   value = "${aws_s3_bucket.s3_bucket_front.website_endpoint}"
 }
 
-output "id" {
+output "websiteId" {
   value = "${aws_s3_bucket.s3_bucket_front.id}"
+}
+
+output "parseId" {
+  value = "${aws_s3_bucket.s3_bucket_parse.id}"
+}
+
+output "tokensId" {
+  value = "${aws_s3_bucket.s3_bucket_tokens.id}"
+}
+
+output "websiteArn" {
+  value = "${aws_s3_bucket.s3_bucket_front.arn}"
+}
+
+output "parseArn" {
+  value = "${aws_s3_bucket.s3_bucket_parse.arn}"
+}
+
+output "tokensArn" {
+  value = "${aws_s3_bucket.s3_bucket_tokens.arn}"
 }

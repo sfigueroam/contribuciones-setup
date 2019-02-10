@@ -2,6 +2,10 @@ variable "prefix" {
   type = "string"
 }
 
+variable "s3Arns" {
+  type = "list"
+}
+
 /*
 data "aws_iam_policy_document" "data_policy_dyndb" {
   statement {
@@ -79,6 +83,16 @@ data "aws_iam_policy_document" "data_policy_cloudwatch" {
   }
 }
 
+
+data "aws_iam_policy_document" "data_policy_s3" {
+  statement {
+    sid = "p1"
+    actions = [
+      "s3:*"
+    ]
+    resources = ["${var.s3Arns}"]
+  }
+}
 /*
 resource "aws_iam_policy" "policy_dyndb" {
   name        = "${var.prefix}-dynamobd"
@@ -102,6 +116,13 @@ resource "aws_iam_policy" "policy_cloudwatch" {
   policy = "${data.aws_iam_policy_document.data_policy_cloudwatch.json}"
 }
 
+resource "aws_iam_policy" "policy_s3" {
+  name = "${var.prefix}-s3"
+  path = "/"
+  description = "Otorga privilegios para s3"
+  policy = "${data.aws_iam_policy_document.data_policy_s3.json}"
+}
+
 /*
 output "out_arn_policy_dyndb" {
   value = "${aws_iam_policy.policy_dyndb.arn}"
@@ -113,4 +134,8 @@ output "out_arn_policy_ses" {
 
 output "out_arn_policy_cloudwatch" {
   value = "${aws_iam_policy.policy_cloudwatch.arn}"
+}
+
+output "out_arn_policy_s3" {
+  value = "${aws_iam_policy.policy_s3.arn}"
 }
