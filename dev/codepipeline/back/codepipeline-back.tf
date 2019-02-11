@@ -112,37 +112,37 @@ resource "aws_codebuild_project" "cbuild-project-back" {
 
     environment_variable {
       name = "BUILD_WST_GRANT_TYPE"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/grant-type"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/grant-type"
       type = "PARAMETER_STORE"
     }
 
     environment_variable {
       name = "BUILD_WST_CLIENT_SECRET"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/client-secret"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-secret"
       type = "PARAMETER_STORE"
     }
 
     environment_variable {
       name = "BUILD_WST_CLIENT_ID"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/client-id"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-id"
       type = "PARAMETER_STORE"
     }
 
     environment_variable {
       name = "BUILD_WST_SCOPE"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/scope"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/scope"
       type = "PARAMETER_STORE"
     }
 
     environment_variable {
       name = "BUILD_WST_HOST"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/host"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/host"
       type = "PARAMETER_STORE"
     }
 
     environment_variable {
       name = "BUILD_WST_PORT"
-      value = "/tgr/dev/contribuciones/back/ws-tierra/port"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/port"
       type = "PARAMETER_STORE"
     }
   }
