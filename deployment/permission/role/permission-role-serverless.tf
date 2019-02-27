@@ -22,7 +22,8 @@ data "aws_iam_policy_document" "servelessDataRole" {
     principals {
       type = "Service"
       identifiers = [
-        "codebuild.amazonaws.com"]
+        "codebuild.amazonaws.com",
+        "ec2.amazonaws.com"]
     }
   }
 }

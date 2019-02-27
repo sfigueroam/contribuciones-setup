@@ -92,7 +92,6 @@ variable "arnLambdaRole" {
 
 
 locals {
-  cBuildRoleBack = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
   cBuildRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
   cPipelineRoleBack = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
   cPipelineRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
@@ -144,7 +143,7 @@ module "deploymentCodepipelineBack" {
   apiGatewayRootID = "${var.apiGatewayRootID}"
   bucketTokens = "${var.tokensBucketID}"
   bucketParse = "${var.parseBucketID}"
-  cBuildRole = "${local.cBuildRoleBack}"
+  cBuildRole = "${module.deploymentPermissionRole.outArnServerlessRole}"
   cPipelineBucket = "${local.cPipelineBucket}"
   cPipelineRole = "${local.cPipelineRoleBack}"
   lambdaRoleArn = "${var.arnLambdaRole}"

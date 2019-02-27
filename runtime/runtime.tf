@@ -113,6 +113,9 @@ module "runtimeRoute53" {
 module "runtimePermissionPolicy" {
   source = "./permission/policy"
   prefix = "${var.appPrefix}"
+  bucketNameFront = "${module.runtimeS3Buckets.outFrontBucketID}"
+  bucketNameParse = "${module.runtimeS3Buckets.outParseBucketId}"
+  bucketNameTokens = "${module.runtimeS3Buckets.outTokensBucketId}"
 }
 
 module "runtimePermissionRole" {
@@ -121,6 +124,7 @@ module "runtimePermissionRole" {
   appName = "${var.appName}"
   env = "${var.env}"
   cloudwatchPolicy = "${module.runtimePermissionPolicy.outArnCloudwatchPolicy}"
+  bucketPolicy = "${module.runtimePermissionPolicy.outArnBucketPolicy}"
 }
 
 
