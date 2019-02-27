@@ -76,7 +76,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
     resources = [
       "arn:aws:cloudformation:*:*:stack/${var.prefix}*/*",
       "arn:aws:iam::*:role/${var.prefix}*",
-      "arn:aws:s3:::${var.prefix}*/*",
+      //"arn:aws:s3:::${var.prefix}*/*",
+      "arn:aws:s3:::${length(var.prefix)>=24 ? substr(var.prefix, 0, min(length(var.prefix), 24)) : var.prefix}*/*",
       "arn:aws:lambda:us-east-1:${var.account}:function:${var.prefix}*"
     ]
   }
@@ -99,7 +100,7 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "s3:GetObject"
     ]
     resources = [
-      "arn:aws:s3:::${var.prefix}*/*",
+      "arn:aws:s3:::${length(var.prefix)>=24 ? substr(var.prefix, 0, min(length(var.prefix), 24)) : var.prefix}*/*",
       "arn:aws:lambda:*:${var.account}:function:${var.prefix}*"
     ]
   }
