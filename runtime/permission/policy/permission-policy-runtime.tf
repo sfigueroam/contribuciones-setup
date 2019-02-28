@@ -1,16 +1,16 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
-variable "bucketNameFront" {
+variable "frontBucketID" {
   type = "string"
 }
 
-variable "bucketNameParse" {
+variable "parseBucketID" {
   type = "string"
 }
 
-variable "bucketNameTokens" {
+variable "tokensBucketID" {
   type = "string"
 }
 
@@ -43,35 +43,33 @@ data "aws_iam_policy_document" "bucketDataPolicy" {
       "s3:DeleteObject*"
     ]
     resources = [
-      "arn:aws:s3:::${var.bucketNameTokens}/*",
-      "arn:aws:s3:::${var.bucketNameTokens}",
-      "arn:aws:s3:::${var.bucketNameParse}/*",
-      "arn:aws:s3:::${var.bucketNameParse}",
-      "arn:aws:s3:::${var.bucketNameFront}/*",
-      "arn:aws:s3:::${var.bucketNameFront}"]
+      "arn:aws:s3:::${var.tokensBucketID}/*",
+      "arn:aws:s3:::${var.tokensBucketID}",
+      "arn:aws:s3:::${var.parseBucketID}/*",
+      "arn:aws:s3:::${var.parseBucketID}",
+      "arn:aws:s3:::${var.frontBucketID}/*",
+      "arn:aws:s3:::${var.frontBucketID}"]
   }
 }
 
-
-
 resource "aws_iam_policy" "cloudwatchPolicy" {
-  name = "${var.prefix}-cloudwatch-logs"
+  name = "${var.appPrefix}-cloudwatch-logs"
   path = "/"
   description = "Otorga privilegios para la creacion de logs CloudWatch"
   policy = "${data.aws_iam_policy_document.cloudwatchDataPolicy.json}"
 }
 
 resource "aws_iam_policy" "bucketPolicy" {
-  name = "${var.prefix}-s3"
+  name = "${var.appPrefix}-s3"
   path = "/"
   description = "Otorga privilegios sobre los bucket del proyecto"
   policy = "${data.aws_iam_policy_document.bucketDataPolicy.json}"
 }
 
-output "outArnCloudwatchPolicy" {
+output "cloudwatchPolicyArn" {
   value = "${aws_iam_policy.cloudwatchPolicy.arn}"
 }
 
-output "outArnBucketPolicy" {
+output "bucketsPolicyArn" {
   value = "${aws_iam_policy.bucketPolicy.arn}"
 }

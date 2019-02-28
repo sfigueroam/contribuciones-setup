@@ -13,8 +13,8 @@ variable "appName" {
   description = "Nombre de la aplicacion."
 }
 
-variable "arnServerlessPolicy" {
-  default = ""
+variable "serverlessPolicyArn" {
+  type = "string"
 }
 
 variable "repositoryFront" {
@@ -36,7 +36,7 @@ variable "apiGatewayId" {
 module "governancePermissionPolicy" {
   source = "./developer/policy"
   account = "${var.account}"
-  prefix = "${var.appPrefix}"
+  appPrefix = "${var.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
   repositoryBack = "${var.repositoryBack}"
@@ -48,9 +48,9 @@ module "governancePermissionGroup" {
   source = "./developer/group"
   appName = "${var.appName}"
   env = "${var.env}"
-  arnLambdaPolicy = "${module.governancePermissionPolicy.outArnLambdaPolicy}"
-  arnCodecommitPolicy = "${module.governancePermissionPolicy.outArnCodecommitPolicy}"
-  arnApiGatewayPolicy = "${module.governancePermissionPolicy.outArnApiGatewayPolicy}"
+  lambdaPolicyArn = "${module.governancePermissionPolicy.lambdaPolicyArn}"
+  codecommitPolicyArn = "${module.governancePermissionPolicy.codecommitPolicyArn}"
+  apiGatewayPolicyArn = "${module.governancePermissionPolicy.apiGatewayPolicyArn}"
 }
 
 module "governancePermisionRole" {
@@ -58,5 +58,5 @@ module "governancePermisionRole" {
   prefix = "${var.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
-  arnServerlessPolicy = "${var.arnServerlessPolicy}"
+  serverlessPolicyArn = "${var.serverlessPolicyArn}"
 }

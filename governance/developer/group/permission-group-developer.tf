@@ -6,15 +6,15 @@ variable "env" {
   type = "string"
 }
 
-variable "arnCodecommitPolicy" {
+variable "codecommitPolicyArn" {
   type = "string"
 }
 
-variable "arnLambdaPolicy" {
+variable "lambdaPolicyArn" {
   type = "string"
 }
 
-variable "arnApiGatewayPolicy" {
+variable "apiGatewayPolicyArn" {
   type = "string"
 }
 
@@ -27,20 +27,20 @@ resource "aws_iam_group" "developGroup" {
 resource "aws_iam_group_policy_attachment" "codecommitPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
-  policy_arn = "${var.arnCodecommitPolicy}"
+  policy_arn = "${var.codecommitPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }
 
 resource "aws_iam_group_policy_attachment" "lambdaPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
-  policy_arn = "${var.arnLambdaPolicy}"
+  policy_arn = "${var.lambdaPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }
 
 resource "aws_iam_group_policy_attachment" "apiGatewayPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
-  policy_arn = "${var.arnApiGatewayPolicy}"
+  policy_arn = "${var.apiGatewayPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }

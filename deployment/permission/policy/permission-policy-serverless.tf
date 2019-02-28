@@ -2,7 +2,7 @@ variable "account" {
   type = "string"
 }
 
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
@@ -81,11 +81,11 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
 
     ]
     resources = [
-      "arn:aws:cloudformation:*:*:stack/${var.prefix}*/*",
-      "arn:aws:iam::*:role/${var.prefix}*",
-      //"arn:aws:s3:::${var.prefix}*/*",
-      "arn:aws:s3:::${length(var.prefix)>=24 ? substr(var.prefix, 0, min(length(var.prefix), 24)) : var.prefix}*/*",
-      "arn:aws:lambda:us-east-1:${var.account}:function:${var.prefix}*"
+      "arn:aws:cloudformation:*:*:stack/${var.appPrefix}*/*",
+      "arn:aws:iam::*:role/${var.appPrefix}*",
+      //"arn:aws:s3:::${var.appPrefix}*/*",
+      "arn:aws:s3:::${length(var.appPrefix)>=24 ? substr(var.appPrefix, 0, min(length(var.appPrefix), 24)) : var.appPrefix}*/*",
+      "arn:aws:lambda:us-east-1:${var.account}:function:${var.appPrefix}*"
     ]
   }
   statement {
@@ -107,8 +107,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "s3:GetObject"
     ]
     resources = [
-      "arn:aws:s3:::${length(var.prefix)>=24 ? substr(var.prefix, 0, min(length(var.prefix), 24)) : var.prefix}*/*",
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*"
+      "arn:aws:s3:::${length(var.appPrefix)>=24 ? substr(var.appPrefix, 0, min(length(var.appPrefix), 24)) : var.appPrefix}*/*",
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*"
     ]
   }
   statement {
@@ -116,8 +116,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "lambda:RemovePermission"
     ]
     resources = [
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*",
-      "arn:aws:lambda:us-east-1:${var.account}:function:${var.prefix}*"
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*",
+      "arn:aws:lambda:us-east-1:${var.account}:function:${var.appPrefix}*"
 
     ]
   }
@@ -126,8 +126,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "lambda:DeleteFunction"
     ]
     resources = [
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*",
-      "arn:aws:lambda:us-east-1:${var.account}:function:${var.prefix}*"
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*",
+      "arn:aws:lambda:us-east-1:${var.account}:function:${var.appPrefix}*"
 
     ]
   }
@@ -136,8 +136,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "lambda:GetFunction"
     ]
     resources = [
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*",
-      "arn:aws:lambda:us-east-1:${var.account}:function:${var.prefix}*"
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*",
+      "arn:aws:lambda:us-east-1:${var.account}:function:${var.appPrefix}*"
 
     ]
   }
@@ -146,7 +146,7 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "lambda:AddPermission"
     ]
     resources = [
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*"
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*"
     ]
   }
   statement {
@@ -154,7 +154,7 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "lambda:PublishVersion"
     ]
     resources = [
-      "arn:aws:lambda:*:${var.account}:function:${var.prefix}*"
+      "arn:aws:lambda:*:${var.account}:function:${var.appPrefix}*"
     ]
   }
   statement {
@@ -168,13 +168,13 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
 }
 
 resource "aws_iam_policy" "serverlessPolicy" {
-  name = "${var.prefix}-serverless-deploy"
+  name = "${var.appPrefix}-serverless-deploy"
   path = "/"
   description = "Otorga privilegios para realizar deploy serverless"
   policy = "${data.aws_iam_policy_document.serverlessDataPolicy.json}"
 }
 
-output "outArnServerlessPolicy" {
+output "serverlessPolicyArn" {
   value = "${aws_iam_policy.serverlessPolicy.arn}"
 }
 

@@ -92,10 +92,10 @@ resource "aws_cloudfront_distribution" "cloudfrontDistributionS3Front" {
   }
 }
 
-output "outCloudfrontDomainName" {
+output "cloudfrontDomainName" {
   value = "${aws_cloudfront_distribution.cloudfrontDistributionS3Front.domain_name}"
 }
 
-output "outCloudfronthostedZoneID" {
+output "cloudfrontHostedZoneID" {
   value = "${aws_cloudfront_distribution.cloudfrontDistributionS3Front.hosted_zone_id}"
 }

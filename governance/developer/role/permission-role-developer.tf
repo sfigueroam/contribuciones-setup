@@ -10,7 +10,7 @@ variable "env" {
   type = "string"
 }
 
-variable "arnServerlessPolicy" {
+variable "serverlessPolicyArn" {
   type = "string"
 }
 
@@ -44,3 +44,9 @@ resource "aws_iam_instance_profile" "serverlessRoleProfile" {
   role = "${aws_iam_role.serverlessRole.name}"
 }
 
+resource "aws_iam_role_policy_attachment" "serverlessRoleAttach" {
+  role = "${aws_iam_role.serverlessRole.name}"
+  policy_arn = "${var.serverlessPolicyArn}"
+  depends_on = [
+    "aws_iam_role.serverlessRole"]
+}

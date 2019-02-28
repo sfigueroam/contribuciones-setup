@@ -18,14 +18,14 @@ resource "aws_api_gateway_rest_api" "apigatewayBack" {
   }
 }
 
-output "outApigatewayID" {
+output "apigatewayID" {
   value = "${aws_api_gateway_rest_api.apigatewayBack.id}"
 }
 
-output "outApigatewayRootID" {
+output "apigatewayRootID" {
   value = "${aws_api_gateway_rest_api.apigatewayBack.root_resource_id}"
 }
 
-output "outApigatewayEndpoint" {
+output "apigatewayEndpoint" {
   value = "https://${aws_api_gateway_rest_api.apigatewayBack.id}.execute-api.${var.region}.amazonaws.com/${var.env}"
 }

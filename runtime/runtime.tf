@@ -92,8 +92,8 @@ module "runtimeCloudfront" {
   }
   appName = "${var.appName}"
   env = "${var.env}"
-  bucketWebsiteEndpoint = "${module.runtimeS3Buckets.outBucketFrontWebsiteEndpoint}"
-  bucketName = "${module.runtimeS3Buckets.outFrontBucketID}"
+  bucketWebsiteEndpoint = "${module.runtimeS3Buckets.frontBucketWebsiteEndpoint}"
+  bucketName = "${module.runtimeS3Buckets.frontBucketID}"
   acmCertificateArn = "${var.acmCertificateArn}"
   alias = "${var.appFrontSubdomain}.${var.appFrontDomain}"
 }
@@ -103,8 +103,8 @@ module "runtimeRoute53" {
   providers = {
     aws = "aws.prodDomainAccount"
   }
-  cloudfrontDomainName = "${module.runtimeCloudfront.outCloudfrontDomainName}"
-  cloudfrontHostedZoneID = "${module.runtimeCloudfront.outCloudfronthostedZoneID}"
+  cloudfrontDomainName = "${module.runtimeCloudfront.cloudfrontDomainName}"
+  cloudfrontHostedZoneID = "${module.runtimeCloudfront.cloudfrontHostedZoneID}"
   subdomain = "${var.appFrontSubdomain}"
   domain = "${var.appFrontDomain}"
   route53ZoneID="${var.route53ZoneId}"
@@ -112,62 +112,62 @@ module "runtimeRoute53" {
 
 module "runtimePermissionPolicy" {
   source = "./permission/policy"
-  prefix = "${var.appPrefix}"
-  bucketNameFront = "${module.runtimeS3Buckets.outFrontBucketID}"
-  bucketNameParse = "${module.runtimeS3Buckets.outParseBucketId}"
-  bucketNameTokens = "${module.runtimeS3Buckets.outTokensBucketId}"
+  appPrefix = "${var.appPrefix}"
+  frontBucketID = "${module.runtimeS3Buckets.frontBucketID}"
+  parseBucketID = "${module.runtimeS3Buckets.parseBucketID}"
+  tokensBucketID = "${module.runtimeS3Buckets.tokensBucketID}"
 }
 
 module "runtimePermissionRole" {
   source = "./permission/role"
-  prefix = "${var.appPrefix}"
+  appPrefix = "${var.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
-  cloudwatchPolicy = "${module.runtimePermissionPolicy.outArnCloudwatchPolicy}"
-  bucketPolicy = "${module.runtimePermissionPolicy.outArnBucketPolicy}"
+  cloudwatchPolicy = "${module.runtimePermissionPolicy.cloudwatchPolicyArn}"
+  bucketsPolicy = "${module.runtimePermissionPolicy.bucketsPolicyArn}"
 }
 
 
 output "outContribClientID" {
-  value = "${module.runtimeCognitoAppClients.outContribClientID}"
+  value = "${module.runtimeCognitoAppClients.contribClientID}"
 }
 
 output "outContribRedirectUri" {
-  value = "${module.runtimeCognitoAppClients.outContribRedirectUri}"
+  value = "${module.runtimeCognitoAppClients.contribRedirectUri}"
 }
 
 output "outCloufrontDomainName" {
-  value = "${module.runtimeCloudfront.outCloudfrontDomainName}"
+  value = "${module.runtimeCloudfront.cloudfrontDomainName}"
 }
 
 output "outClouFrontHostedZoneID" {
-  value = "${module.runtimeCloudfront.outCloudfronthostedZoneID}"
+  value = "${module.runtimeCloudfront.cloudfrontHostedZoneID}"
 }
 
 output "outArnLambdaRole" {
-  value = "${module.runtimePermissionRole.outArnLambdaRole}"
+  value = "${module.runtimePermissionRole.lambdaRoleArn}"
 }
 
 output "outApiGatewayID" {
-  value = "${module.runtimeApiGateway.outApigatewayID}"
+  value = "${module.runtimeApiGateway.apigatewayID}"
 }
 
 output "outApiGatewayRootID" {
-  value = "${module.runtimeApiGateway.outApigatewayRootID}"
+  value = "${module.runtimeApiGateway.apigatewayRootID}"
 }
 
 output "outApigatewayEndpoint" {
-  value = "${module.runtimeApiGateway.outApigatewayEndpoint}"
+  value = "${module.runtimeApiGateway.apigatewayEndpoint}"
 }
 
 output "outfrontBucketID" {
-  value = "${module.runtimeS3Buckets.outFrontBucketID}"
+  value = "${module.runtimeS3Buckets.frontBucketID}"
 }
 
 output "outParseBucketID" {
-  value = "${module.runtimeS3Buckets.outParseBucketId}"
+  value = "${module.runtimeS3Buckets.parseBucketID}"
 }
 
 output "outTokensBucketID" {
-  value = "${module.runtimeS3Buckets.outTokensBucketId}"
+  value = "${module.runtimeS3Buckets.tokensBucketID}"
 }

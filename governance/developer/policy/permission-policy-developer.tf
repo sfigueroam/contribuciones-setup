@@ -2,7 +2,7 @@ variable "account" {
   type = "string"
 }
 
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
 
 resource "aws_iam_policy" "codecommitPolicy" {
   count = "${var.env=="dev" ? 1 : 0}"
-  name = "${var.prefix}-codecommit"
+  name = "${var.appPrefix}-codecommit"
   path = "/"
   description = "Otorga privilegios sobre repositorios codecommit de la aplicacion"
   policy = "${data.aws_iam_policy_document.codecommitDataPolicy.json}"
@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "lambdaDataPolicy" {
 
 resource "aws_iam_policy" "lambdaPolicy" {
   count = "${var.env=="dev" ? 1 : 0}"
-  name = "${var.prefix}-lambda"
+  name = "${var.appPrefix}-lambda"
   path = "/"
   description = "Otorga privilegios a las funciones lambda de la aplicacion"
   policy = "${data.aws_iam_policy_document.lambdaDataPolicy.json}"
@@ -104,21 +104,21 @@ data "aws_iam_policy_document" "apiGatewayDataPolicy" {
 
 resource "aws_iam_policy" "apiGatewayPolicy" {
   count = "${var.env=="dev" ? 1 : 0}"
-  name = "${var.prefix}-apigateway"
+  name = "${var.appPrefix}-apigateway"
   path = "/"
   description = "Otorga privilegios a la api de la aplicacion"
   policy = "${data.aws_iam_policy_document.apiGatewayDataPolicy.json}"
 }
 
-output "outArnCodecommitPolicy" {
+output "codecommitPolicyArn" {
   value = "${element(concat(aws_iam_policy.codecommitPolicy.*.arn, list("")), 0)}"
 }
 
-output "outArnLambdaPolicy" {
+output "lambdaPolicyArn" {
   value = "${element(concat(aws_iam_policy.lambdaPolicy.*.arn, list("")), 0)}"
 }
 
-output "outArnApiGatewayPolicy" {
+output "apiGatewayPolicyArn" {
   value = "${element(concat(aws_iam_policy.apiGatewayPolicy.*.arn, list("")), 0)}"
 }
 

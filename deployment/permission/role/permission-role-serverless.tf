@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
@@ -10,7 +10,7 @@ variable "env" {
   type = "string"
 }
 
-variable "arnServerlessPolicy" {
+variable "serverlessPolicyArn" {
   type = "string"
 }
 
@@ -22,14 +22,13 @@ data "aws_iam_policy_document" "servelessDataRole" {
     principals {
       type = "Service"
       identifiers = [
-        "codebuild.amazonaws.com",
-        "ec2.amazonaws.com"]
+        "codebuild.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "serverlessRole" {
-  name = "${var.prefix}-codebuild-back-deployment"
+  name = "${var.appPrefix}-codebuild-back-deployment"
   description = "Otorga privilegios para realizar deploy serverless en codebuild"
   assume_role_policy = "${data.aws_iam_policy_document.servelessDataRole.json}"
   tags = {
@@ -40,13 +39,13 @@ resource "aws_iam_role" "serverlessRole" {
 
 resource "aws_iam_role_policy_attachment" "serverlessRoleAttach" {
   role = "${aws_iam_role.serverlessRole.name}"
-  policy_arn = "${var.arnServerlessPolicy}"
+  policy_arn = "${var.serverlessPolicyArn}"
   depends_on = [
     "aws_iam_role.serverlessRole"]
 }
 
 
-output "outArnServerlessRole" {
+output "serverlessRoleArn" {
   value = "${aws_iam_role.serverlessRole.arn}"
 }
 

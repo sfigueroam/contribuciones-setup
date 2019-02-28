@@ -101,7 +101,7 @@ locals {
 module "deploymentPermissionPolicy" {
   source = "./permission/policy"
   account = "${var.account}"
-  prefix = "${var.appPrefix}"
+  appPrefix = "${var.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
   apiGatewayID = "${var.apiGatewayID}"
@@ -109,10 +109,10 @@ module "deploymentPermissionPolicy" {
 
 module "deploymentPermissionRole" {
   source = "./permission/role"
-  prefix = "${var.appPrefix}"
+  appPrefix = "${var.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
-  arnServerlessPolicy = "${module.deploymentPermissionPolicy.outArnServerlessPolicy}"
+  serverlessPolicyArn = "${module.deploymentPermissionPolicy.serverlessPolicyArn}"
 }
 
 module "deploymentCodepipelineFront" {
@@ -143,7 +143,7 @@ module "deploymentCodepipelineBack" {
   apiGatewayRootID = "${var.apiGatewayRootID}"
   bucketTokens = "${var.tokensBucketID}"
   bucketParse = "${var.parseBucketID}"
-  cBuildRole = "${module.deploymentPermissionRole.outArnServerlessRole}"
+  cBuildRole = "${module.deploymentPermissionRole.serverlessRoleArn}"
   cPipelineBucket = "${local.cPipelineBucket}"
   cPipelineRole = "${local.cPipelineRoleBack}"
   lambdaRoleArn = "${var.arnLambdaRole}"
@@ -153,6 +153,6 @@ module "deploymentCodepipelineBack" {
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
 }
 
-output "arnServerlessPolicy" {
-  value = "${module.deploymentPermissionPolicy.outArnServerlessPolicy}"
+output "serverlessPolicyArn" {
+  value = "${module.deploymentPermissionPolicy.serverlessPolicyArn}"
 }

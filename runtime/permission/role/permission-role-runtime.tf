@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "appPrefix" {
   type = "string"
 }
 
@@ -14,7 +14,7 @@ variable "cloudwatchPolicy" {
   type = "string"
 }
 
-variable "bucketPolicy" {
+variable "bucketsPolicy" {
   type = "string"
 }
 
@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "lambdaDataRole" {
 }
 
 resource "aws_iam_role" "lambdaRole" {
-  name = "${var.prefix}-back-lambda"
+  name = "${var.appPrefix}-back-lambda"
   assume_role_policy = "${data.aws_iam_policy_document.lambdaDataRole.json}"
   tags = {
     Application = "${var.appName}"
@@ -48,13 +48,13 @@ resource "aws_iam_role_policy_attachment" "cloudwatchRoleAttach" {
     "aws_iam_role.lambdaRole"]
 }
 
-resource "aws_iam_role_policy_attachment" "bucketRoleAttach" {
+resource "aws_iam_role_policy_attachment" "bucketsRoleAttach" {
   role = "${aws_iam_role.lambdaRole.name}"
-  policy_arn = "${var.bucketPolicy}"
+  policy_arn = "${var.bucketsPolicy}"
   depends_on = [
     "aws_iam_role.lambdaRole"]
 }
 
-output "outArnLambdaRole" {
+output "lambdaRoleArn" {
   value = "${aws_iam_role.lambdaRole.arn}"
 }

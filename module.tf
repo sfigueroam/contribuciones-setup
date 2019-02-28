@@ -104,6 +104,7 @@ module "governance" {
   repositoryBack = "${local.repositoryBack}"
   repositoryFront = "${local.repositoryFront}"
   apiGatewayId = "${module.runtime.outApiGatewayID}"
+  serverlessPolicyArn = "${module.deployment.serverlessPolicyArn}"
 }
 
 module "deployment" {
