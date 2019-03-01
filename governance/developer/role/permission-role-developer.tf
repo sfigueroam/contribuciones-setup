@@ -45,6 +45,7 @@ resource "aws_iam_instance_profile" "serverlessRoleProfile" {
 }
 
 resource "aws_iam_role_policy_attachment" "serverlessRoleAttach" {
+  count = "${var.env=="dev" ? 1 : 0}"
   role = "${aws_iam_role.serverlessRole.name}"
   policy_arn = "${var.serverlessPolicyArn}"
   depends_on = [
