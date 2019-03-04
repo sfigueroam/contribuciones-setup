@@ -30,7 +30,32 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
   statement {
     sid = "codecommitAccess"
     actions = [
-      "codecommit:*"
+      "codecommit:List*"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid = "codecommitAccessDevelopBranch"
+    actions = [
+      "codecommit:Batch*",
+      "codecommit:CancelUploadArchive",
+      "codecommit:DescribePullRequestEvents",
+      "codecommit:Get*",
+      "codecommit:GitPull",
+      "codecommit:CreatePullRequest",
+      "codecommit:DeleteCommentContent",
+      "codecommit:DeleteFile",
+      "codecommit:GitPush",
+      "codecommit:MergePullRequestByFastForward",
+      "codecommit:PostCommentForComparedCommit",
+      "codecommit:PostCommentForPullRequest",
+      "codecommit:PostCommentReply",
+      "codecommit:PutFile",
+      "codecommit:UpdateComment",
+      "codecommit:UpdatePullRequestDescription",
+      "codecommit:UpdatePullRequestStatus",
+      "codecommit:UpdatePullRequestTitle",
+      "codecommit:UploadArchive"
     ]
     resources = [
       "arn:aws:codecommit:*:${var.account}:${var.repositoryFront}",
@@ -42,6 +67,34 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
       values=[
         "refs/heads/develop",
         "refs/heads/develop/*"]
+    }
+  }
+  statement {
+    sid = "codecommitAccessFeatureBranch"
+    actions = [
+      "codecommit:Batch*",
+      "codecommit:CancelUploadArchive",
+      "codecommit:DescribePullRequestEvents",
+      "codecommit:Get*",
+      "codecommit:GitPull",
+      "codecommit:CreatePullRequest",
+      "codecommit:Delete*",
+      "codecommit:GitPush",
+      "codecommit:MergePullRequestByFastForward",
+      "codecommit:Post*",
+      "codecommit:PutFile",
+      "codecommit:Update*",
+    ]
+    resources = [
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryFront}",
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryBack}"
+    ]
+    condition {
+      test="StringLikeIfExists"
+      variable="codecommit:References"
+      values=[
+        "refs/heads/feature",
+        "refs/heads/feature/*"]
     }
   }
 }
@@ -198,28 +251,26 @@ resource "aws_iam_policy" "codepipelinePolicy" {
 
 data "aws_iam_policy_document" "bucketsS3DataPolicy" {
   statement {
+    sid = "listBucketsAccess"
+    actions = [
+      "s3:List*",
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
     sid = "bucketsAccess"
     actions = [
       "s3:Get*",
-      "s3:List*"
+      "s3:Put*",
+      "s3:DeleteObject*",
     ]
     resources = [
       "arn:aws:s3:::${var.appPrefix}*",
       "arn:aws:s3:::${var.appPrefix}*/*"
     ]
   }
-  statement {
-    sid = "codebuildAccess"
-    actions = [
-      "codebuild:BatchGet*",
-      "codebuild:Get*",
-      "codebuild:List*",
-    ]
-    resources = [
-      "arn:aws:codebuild:*:*:project/${var.appPrefix}*"
-    ]
-  }
-
 }
 
 resource "aws_iam_policy" "bucketsS3Policy" {
