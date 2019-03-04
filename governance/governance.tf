@@ -51,6 +51,7 @@ module "governancePermissionGroup" {
   lambdaPolicyArn = "${module.governancePermissionPolicy.lambdaPolicyArn}"
   codecommitPolicyArn = "${module.governancePermissionPolicy.codecommitPolicyArn}"
   apiGatewayPolicyArn = "${module.governancePermissionPolicy.apiGatewayPolicyArn}"
+  cloudWatchPolicyArn = "${module.governancePermissionPolicy.cloudWatchPolicyArn}"
 }
 
 module "governancePermisionRole" {

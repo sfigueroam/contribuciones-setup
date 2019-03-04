@@ -18,6 +18,10 @@ variable "apiGatewayPolicyArn" {
   type = "string"
 }
 
+variable "cloudWatchPolicyArn" {
+  type = "string"
+}
+
 resource "aws_iam_group" "developGroup" {
   count = "${var.env=="dev" ? 1 : 0}"
   name = "team-${var.env}-${var.appName}"
@@ -42,5 +46,12 @@ resource "aws_iam_group_policy_attachment" "apiGatewayPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
   policy_arn = "${var.apiGatewayPolicyArn}"
+  depends_on = ["aws_iam_group.developGroup"]
+}
+
+resource "aws_iam_group_policy_attachment" "cloudWatchPolicyAttach" {
+  count      = "${var.env=="dev" ? 1 : 0}"
+  group      = "${aws_iam_group.developGroup.name}"
+  policy_arn = "${var.cloudWatchPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }

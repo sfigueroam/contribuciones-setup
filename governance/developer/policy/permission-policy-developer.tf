@@ -47,6 +47,42 @@ resource "aws_iam_policy" "codecommitPolicy" {
   policy = "${data.aws_iam_policy_document.codecommitDataPolicy.json}"
 }
 
+data "aws_iam_policy_document" "cloudwatchDataPolicy" {
+  statement {
+    sid = "cloudWatch"
+    actions = [
+      "logs:ListTagsLogGroup",
+      "logs:DescribeQueries",
+      "logs:GetLogRecord",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:DescribeSubscriptionFilters",
+      "logs:StartQuery",
+      "logs:DescribeMetricFilters",
+      "logs:StopQuery",
+      "logs:TestMetricFilter",
+      "logs:GetLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:DescribeExportTasks",
+      "logs:GetQueryResults",
+      "logs:GetLogEvents",
+      "logs:FilterLogEvents",
+      "logs:GetLogGroupFields",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeDestinations"
+    ]
+    resources = [
+      "arn:aws:logs:*:*:log-group:/aws/lambda/*:*:*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudWatchPolicy" {
+  count = "${var.env=="dev" ? 1 : 0}"
+  name = "${var.appPrefix}-cloudWatch"
+  path = "/"
+  description = ""
+  policy = "${data.aws_iam_policy_document.cloudwatchDataPolicy.json}"
+}
 
 data "aws_iam_policy_document" "lambdaDataPolicy" {
   statement {
@@ -120,5 +156,9 @@ output "lambdaPolicyArn" {
 
 output "apiGatewayPolicyArn" {
   value = "${element(concat(aws_iam_policy.apiGatewayPolicy.*.arn, list("")), 0)}"
+}
+
+output "cloudWatchPolicyArn" {
+  value = "${element(concat(aws_iam_policy.cloudWatchPolicy.*.arn, list("")), 0)}"
 }
 
