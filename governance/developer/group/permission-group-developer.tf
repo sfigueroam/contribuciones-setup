@@ -22,6 +22,14 @@ variable "cloudWatchPolicyArn" {
   type = "string"
 }
 
+variable "codepipelinePolicyArn" {
+  type = "string"
+}
+
+variable "bucketsS3PolicyArn" {
+  type = "string"
+}
+
 resource "aws_iam_group" "developGroup" {
   count = "${var.env=="dev" ? 1 : 0}"
   name = "team-${var.env}-${var.appName}"
@@ -53,5 +61,19 @@ resource "aws_iam_group_policy_attachment" "cloudWatchPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
   policy_arn = "${var.cloudWatchPolicyArn}"
+  depends_on = ["aws_iam_group.developGroup"]
+}
+
+resource "aws_iam_group_policy_attachment" "codepipelinePolicyAttach" {
+  count      = "${var.env=="dev" ? 1 : 0}"
+  group      = "${aws_iam_group.developGroup.name}"
+  policy_arn = "${var.codepipelinePolicyArn}"
+  depends_on = ["aws_iam_group.developGroup"]
+}
+
+resource "aws_iam_group_policy_attachment" "bucketsS3PolicyAttach" {
+  count      = "${var.env=="dev" ? 1 : 0}"
+  group      = "${aws_iam_group.developGroup.name}"
+  policy_arn = "${var.bucketsS3PolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }

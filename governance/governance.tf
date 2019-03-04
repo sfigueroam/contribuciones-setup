@@ -52,6 +52,8 @@ module "governancePermissionGroup" {
   codecommitPolicyArn = "${module.governancePermissionPolicy.codecommitPolicyArn}"
   apiGatewayPolicyArn = "${module.governancePermissionPolicy.apiGatewayPolicyArn}"
   cloudWatchPolicyArn = "${module.governancePermissionPolicy.cloudWatchPolicyArn}"
+  codepipelinePolicyArn = "${module.governancePermissionPolicy.codepipelinePolicyArn}"
+  bucketsS3PolicyArn = "${module.governancePermissionPolicy.bucketsS3PolicyArn}"
 }
 
 module "governancePermisionRole" {
