@@ -30,6 +30,10 @@ variable "bucketsS3PolicyArn" {
   type = "string"
 }
 
+variable "parametersPolicyArn" {
+  type = "string"
+}
+
 resource "aws_iam_group" "developGroup" {
   count = "${var.env=="dev" ? 1 : 0}"
   name = "team-${var.env}-${var.appName}"
@@ -75,5 +79,12 @@ resource "aws_iam_group_policy_attachment" "bucketsS3PolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
   policy_arn = "${var.bucketsS3PolicyArn}"
+  depends_on = ["aws_iam_group.developGroup"]
+}
+
+resource "aws_iam_group_policy_attachment" "parametersPolicyAttach" {
+  count      = "${var.env=="dev" ? 1 : 0}"
+  group      = "${aws_iam_group.developGroup.name}"
+  policy_arn = "${var.parametersPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }

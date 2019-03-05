@@ -195,7 +195,7 @@ resource "aws_iam_policy" "cloudWatchPolicy" {
   count = "${var.env=="dev" ? 1 : 0}"
   name = "${var.appPrefix}-cloudWatch"
   path = "/"
-  description = ""
+  description = "Otorga privilegios a los logs de la aplicacion"
   policy = "${data.aws_iam_policy_document.cloudwatchDataPolicy.json}"
 }
 
@@ -207,7 +207,8 @@ data "aws_iam_policy_document" "codepipelineDataPolicy" {
       "codebuild:ListBuilds",
       "codebuild:ListBuildsForProject",
       "codebuild:ListProjects",
-      "codebuild:BatchGetProjects"
+      "codebuild:BatchGetProjects",
+      "codebuild:BatchGetBuilds"
     ]
     resources = [
       "*"
@@ -229,11 +230,11 @@ data "aws_iam_policy_document" "codepipelineDataPolicy" {
   statement {
     sid = "codebuildAccess"
     actions = [
-      "codepipeline:BatchGetBuilds",
-      "codepipeline:BatchGetProjects",
-      "codepipeline:ListConnectedOAuthAccounts",
-      "codepipeline:ListCuratedEnvironmentImages",
-      "codepipeline:ListRepositories"
+      "codebuild:BatchGetBuilds",
+      "codebuild:BatchGetProjects",
+      "codebuild:ListConnectedOAuthAccounts",
+      "codebuild:ListCuratedEnvironmentImages",
+      "codebuild:ListRepositories"
     ]
     resources = [
       "arn:aws:codebuild:*:*:project/${var.appPrefix}*"
@@ -277,8 +278,42 @@ resource "aws_iam_policy" "bucketsS3Policy" {
   count = "${var.env=="dev" ? 1 : 0}"
   name = "${var.appPrefix}-s3-buckets"
   path = "/"
-  description = "Otorga privilegios a los codepipeline y codebuild de la aplicacion"
+  description = "Otorga privilegios a los buckets de la aplicacion"
   policy = "${data.aws_iam_policy_document.bucketsS3DataPolicy.json}"
+}
+
+data "aws_iam_policy_document" "parametersDataPolicy" {
+  statement {
+    sid = "listParametersAccess"
+    actions = [
+      "ssm:DescribeParameters",
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    sid = "parametersAccess"
+    actions = [
+      "ssm:GetParameterHistory",
+      "ssm:DescribeDocumentParameters",
+      "ssm:GetParametersByPath",
+      "ssm:GetParameters",
+      "ssm:GetParameter",
+      "ssm:PutParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:*:*:parameter/tgr/${var.env}/${var.appName}/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "parametersPolicy" {
+  count = "${var.env=="dev" ? 1 : 0}"
+  name = "${var.appPrefix}-s3-ssm-parameters"
+  path = "/"
+  description = "Otorga privilegios a los parametros de la aplicacion"
+  policy = "${data.aws_iam_policy_document.parametersDataPolicy.json}"
 }
 
 
@@ -304,4 +339,8 @@ output "codepipelinePolicyArn" {
 
 output "bucketsS3PolicyArn" {
   value = "${element(concat(aws_iam_policy.bucketsS3Policy.*.arn, list("")), 0)}"
+}
+
+output "parametersPolicyArn" {
+  value = "${element(concat(aws_iam_policy.parametersPolicy.*.arn, list("")), 0)}"
 }

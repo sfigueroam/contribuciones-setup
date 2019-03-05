@@ -54,6 +54,7 @@ module "governancePermissionGroup" {
   cloudWatchPolicyArn = "${module.governancePermissionPolicy.cloudWatchPolicyArn}"
   codepipelinePolicyArn = "${module.governancePermissionPolicy.codepipelinePolicyArn}"
   bucketsS3PolicyArn = "${module.governancePermissionPolicy.bucketsS3PolicyArn}"
+  parametersPolicyArn = "${module.governancePermissionPolicy.parametersPolicyArn}"
 }
 
 module "governancePermisionRole" {
