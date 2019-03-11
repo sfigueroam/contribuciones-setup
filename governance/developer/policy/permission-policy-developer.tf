@@ -65,8 +65,7 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
       test="StringLikeIfExists"
       variable="codecommit:References"
       values=[
-        "refs/heads/develop",
-        "refs/heads/develop/*"]
+        "refs/heads/develop"]
     }
   }
   statement {
