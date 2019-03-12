@@ -132,8 +132,12 @@ output "outContribClientID" {
   value = "${module.runtimeCognitoAppClients.contribClientID}"
 }
 
-output "outContribRedirectUri" {
+output "contribRedirectUri" {
   value = "${module.runtimeCognitoAppClients.contribRedirectUri}"
+}
+
+output "contribLogoutUri" {
+  value = "${module.runtimeCognitoAppClients.contribLogoutUri}"
 }
 
 output "outCloufrontDomainName" {

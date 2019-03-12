@@ -58,11 +58,19 @@ variable "cognitoAuthorizeURL" {
   type = "string"
 }
 
+variable "cognitoLogoutURL" {
+  type = "string"
+}
+
 variable "cognitoContribClientId" {
   type = "string"
 }
 
 variable "cognitoContribRedirectURI" {
+  type = "string"
+}
+
+variable "cognitoContribLogoutURI" {
   type = "string"
 }
 
@@ -126,9 +134,11 @@ module "deploymentCodepipelineFront" {
   cPipelineBucket = "${local.cPipelineBucket}"
   bucketFrontID = "${var.frontBucketID}"
   cognitoAuthorizeURL = "${var.cognitoAuthorizeURL}"
+  cognitoLogoutURL = "${var.cognitoLogoutURL}"
   cognitoContribClientId = "${var.cognitoContribClientId}"
   cognitoContribRedirectURI = "${var.cognitoContribRedirectURI}"
-  endpointApiPublica="${var.endpointApiPublica}" //"${module.api-gateway.endpoint}"
+  cognitoContribLogoutURI = "${var.cognitoContribLogoutURI}"
+  backEndpoint="${var.endpointApiPublica}" //"${module.api-gateway.endpoint}"
   endpointApiElasticsearch="${var.endpointApiElasticsearch}" //"${var.endpointApiElasticsearch}"
   kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"

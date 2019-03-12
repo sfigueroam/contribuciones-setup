@@ -9,5 +9,6 @@ acmCertificateArn       = "arn:aws:acm:us-east-1:080540609156:certificate/af13e4
 cognitoPoolId           = "us-east-1_dD7fg7AJB"
 cognitoProviders        = ["ClaveUnica","COGNITO"]
 cognitoReadAttributes   = ["custom:clave-unica:run,custom:clave-unica:name"]
-cognitoAuthorizeURL     = "https://autentica.tegere.info/oauth2/authorize"
+cognitoAuthorizeURL     = "https://autentica-dev.tegere.info/oauth2/authorize"
+cognitoLogoutURL        = "https://autentica.tegere.info/logout"
 cognitoPoolArn          = "arn:aws:cognito-idp:us-east-1:080540609156:userpool/us-east-1_dD7fg7AJB"

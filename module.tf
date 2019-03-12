@@ -53,6 +53,10 @@ variable "cognitoAuthorizeURL" {
   type = "string"
 }
 
+variable "cognitoLogoutURL" {
+  type = "string"
+}
+
 variable "cognitoProviders" {
   type = "list"
 }
@@ -117,8 +121,10 @@ module "deployment" {
   apiGatewayRootID = "${module.runtime.outApiGatewayRootID}"
   cognitoPoolArn = "${var.cognitoPoolArn}"
   cognitoAuthorizeURL = "${var.cognitoAuthorizeURL}"
+  cognitoLogoutURL = "${var.cognitoLogoutURL}"
   cognitoContribClientId = "${module.runtime.outContribClientID}"
-  cognitoContribRedirectURI = "${module.runtime.outContribRedirectUri}"
+  cognitoContribRedirectURI = "${module.runtime.contribRedirectUri}"
+  cognitoContribLogoutURI = "${module.runtime.contribLogoutUri}"
   endpointApiElasticsearch = "${var.endpointApiElasticsearch}"
   endpointApiPublica = "${module.runtime.outApigatewayEndpoint}"
   repositoryFront = "${local.repositoryFront}"

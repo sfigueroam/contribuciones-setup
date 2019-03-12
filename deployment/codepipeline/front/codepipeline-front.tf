@@ -34,11 +34,15 @@ variable "endpointApiElasticsearch" {
   type = "string"
 }
 
-variable "endpointApiPublica" {
+variable "backEndpoint" {
   type = "string"
 }
 
 variable "cognitoAuthorizeURL" {
+  type = "string"
+}
+
+variable "cognitoLogoutURL" {
   type = "string"
 }
 
@@ -47,6 +51,10 @@ variable "cognitoContribClientId" {
 }
 
 variable "cognitoContribRedirectURI" {
+  type = "string"
+}
+
+variable "cognitoContribLogoutURI" {
   type = "string"
 }
 
@@ -92,18 +100,13 @@ resource "aws_codebuild_project" "codebuildFront" {
     }
 
     environment_variable {
-      name = "BUILD_ENDPOINT_API_ELASTICSEARCH"
+      name = "BUILD_ELASTICSEARCH_ENDPOINT"
       value = "${var.endpointApiElasticsearch}"
     }
 
     environment_variable {
-      name = "BUILD_ENDPOINT_API_PUBLICA"
-      value = "${var.endpointApiPublica}"
-    }
-
-    environment_variable {
-      name = "BUILD_ENDPOINT_API_PRIVADA"
-      value = "${var.endpointApiPublica}"
+      name = "BUILD_BACK_ENDPOINT"
+      value = "${var.backEndpoint}"
     }
 
     environment_variable {
@@ -113,28 +116,34 @@ resource "aws_codebuild_project" "codebuildFront" {
     }
 
     environment_variable {
-      name = "BUILD_COGNITO_URL_AUTHORIZE"
+      name = "BUILD_AUTHORIZE_URL"
       value = "${var.cognitoAuthorizeURL}"
     }
 
     environment_variable {
-      name = "BUILD_COGNITO_CLIENT_ID_1"
+      name = "BUILD_LOGOUT_URL"
+      value = "${var.cognitoLogoutURL}"
+    }
+
+    environment_variable {
+      name = "BUILD_CLIENT_ID"
       value = "${var.cognitoContribClientId}"
     }
 
     environment_variable {
-      name = "BUILD_COGNITO_CLIENT_REDIRECT_URI_1"
+      name = "BUILD_REDIRECT_URI"
       value = "${var.cognitoContribRedirectURI}"
     }
 
     environment_variable {
-      name = "BUILD_COGNITO_CLIENT_ID_2"
-      value = "${var.cognitoContribClientId}"
+      name = "BUILD_LOGOUT_URI"
+      value = "${var.cognitoContribLogoutURI}"
     }
 
     environment_variable {
-      name = "BUILD_COGNITO_CLIENT_REDIRECT_URI_2"
-      value = "${var.cognitoContribRedirectURI}"
+      name = "BUILD_CUENTA_USUARIO_URL"
+      value = "/tgr/${var.env}/${var.appName}/front/cuenta-usuario-url"
+      type = "PARAMETER_STORE"
     }
   }
 

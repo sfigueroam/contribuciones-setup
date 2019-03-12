@@ -59,3 +59,7 @@ output "contribClientID" {
 output "contribRedirectUri" {
   value = "${aws_cognito_user_pool_client.appClient.callback_urls[0]}"
 }
+
+output "contribLogoutUri" {
+  value = "${aws_cognito_user_pool_client.appClient.logout_urls[0]}"
+}
