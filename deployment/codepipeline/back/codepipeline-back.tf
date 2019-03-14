@@ -155,6 +155,36 @@ resource "aws_codebuild_project" "codebuildBack" {
       value = "/tgr/${var.env}/${var.appName}/back/ws-tierra/port"
       type = "PARAMETER_STORE"
     }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_HOST"
+      value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/host"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_IDAPP_V2"
+      value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/idapp/v2"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_IDAPP_V3"
+      value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/idapp/v3"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_PATH"
+      value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/path"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_THRESHOLD"
+      value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/threshold"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {

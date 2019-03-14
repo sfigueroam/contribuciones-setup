@@ -145,6 +145,18 @@ resource "aws_codebuild_project" "codebuildFront" {
       value = "/tgr/${var.env}/${var.appName}/front/cuenta-usuario-url"
       type = "PARAMETER_STORE"
     }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_KEY_V2"
+      value = "/tgr/${var.env}/${var.appName}/front/recaptcha/key/v2"
+      type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_RECAPTCHA_KEY_V3"
+      value = "/tgr/${var.env}/${var.appName}/front/recaptcha/key/v3"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {
