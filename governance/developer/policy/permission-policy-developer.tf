@@ -286,6 +286,7 @@ data "aws_iam_policy_document" "parametersDataPolicy" {
     sid = "listParametersAccess"
     actions = [
       "ssm:DescribeParameters",
+      "kms:ListAliases"
     ]
     resources = [
       "*"
@@ -299,7 +300,9 @@ data "aws_iam_policy_document" "parametersDataPolicy" {
       "ssm:GetParametersByPath",
       "ssm:GetParameters",
       "ssm:GetParameter",
-      "ssm:PutParameter"
+      "ssm:PutParameter",
+      "ssm:DeleteParameter",
+      "ssm:DeleteParameters"
     ]
     resources = [
       "arn:aws:ssm:*:*:parameter/tgr/${var.env}/${var.appName}/*"
