@@ -157,6 +157,12 @@ resource "aws_codebuild_project" "codebuildFront" {
       value = "/tgr/${var.env}/${var.appName}/front/recaptcha/key/v3"
       type = "PARAMETER_STORE"
     }
+
+    environment_variable {
+      name = "BUILD_DEVICE_INFO_ENDPOINT"
+      value = "/tgr/${var.env}/${var.appName}/front/device-info-endpoint"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {
