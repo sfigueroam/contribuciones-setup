@@ -163,6 +163,12 @@ resource "aws_codebuild_project" "codebuildFront" {
       value = "/tgr/${var.env}/${var.appName}/front/device-info-endpoint"
       type = "PARAMETER_STORE"
     }
+
+    environment_variable {
+      name = "BUILD_GOOGLE_ANALYTIC_CODE"
+      value = "/tgr/${var.env}/${var.appName}/front/google-analytics-code"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {
