@@ -64,6 +64,9 @@ variable "cognitoReadAttributes" {
 
 module "runtimeCognitoAppClients" {
   source = "./resource/cognito"
+  providers = {
+    aws = "aws.prodDomainAccount"
+  }
   appPrefix = "${var.appPrefix}"
   cloudfrontAlias = "${var.appFrontSubdomain}.${var.appFrontDomain}"
   cognitoReadAttributes = ["${var.cognitoReadAttributes}"]
