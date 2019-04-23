@@ -3,9 +3,9 @@ provider "aws" {
   region = "us-east-1"
   version = "~> 1.57"
   assume_role {
-    role_arn     = "arn:aws:iam::${var.frontAccount}:role/tgr-prod-terraform-acceso-multi-cuenta"
+    role_arn = "arn:aws:iam::${var.frontAccount}:role/tgr-prod-terraform-acceso-multi-cuenta"
     session_name = "terraform-prod"
-    external_id  = "tgr-terraform-multi-cuenta"
+    external_id = "tgr-terraform-multi-cuenta"
   }
 }
 
@@ -16,6 +16,10 @@ variable "appPrefix" {
 variable "frontAccount" {
   type = "string"
   description = "Numero de la cuenta donde se configurará Route53 y Cloudfront."
+}
+
+variable "account" {
+  type = "string"
 }
 
 variable "region" {
@@ -69,9 +73,11 @@ module "runtimeCognitoAppClients" {
   }
   appPrefix = "${var.appPrefix}"
   cloudfrontAlias = "${var.appFrontSubdomain}.${var.appFrontDomain}"
-  cognitoReadAttributes = ["${var.cognitoReadAttributes}"]
+  cognitoReadAttributes = [
+    "${var.cognitoReadAttributes}"]
   cognitoPoolID = "${var.cognitoPoolId}"
-  cognitoProviders = ["${var.cognitoProviders}"]
+  cognitoProviders = [
+    "${var.cognitoProviders}"]
 }
 
 module "runtimeS3Buckets" {
@@ -110,7 +116,7 @@ module "runtimeRoute53" {
   cloudfrontHostedZoneID = "${module.runtimeCloudfront.cloudfrontHostedZoneID}"
   subdomain = "${var.appFrontSubdomain}"
   domain = "${var.appFrontDomain}"
-  route53ZoneID="${var.route53ZoneId}"
+  route53ZoneID = "${var.route53ZoneId}"
 }
 
 module "runtimePermissionPolicy" {
@@ -130,6 +136,13 @@ module "runtimePermissionRole" {
   bucketsPolicy = "${module.runtimePermissionPolicy.bucketsPolicyArn}"
 }
 
+module "runtimeElasticSearch" {
+  source = "./resource/elasticsearch"
+  appPrefix = "${var.appPrefix}"
+  appName = "${var.appName}"
+  account = "${var.account}"
+  env = "${var.env}"
+}
 
 output "outContribClientID" {
   value = "${module.runtimeCognitoAppClients.contribClientID}"

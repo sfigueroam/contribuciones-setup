@@ -89,6 +89,7 @@ module "runtime" {
   appName = "${var.appName}"
   env = "${var.env}"
   frontAccount = "${var.frontAccount}"
+  account = "${var.account}"
   appFrontSubdomain = "${var.appFrontSubdomain}"
   appFrontDomain = "${var.appFrontDomain}"
   cognitoPoolId = "${var.cognitoPoolId}"
