@@ -33,6 +33,10 @@ variable "apiGatewayId" {
   type = "string"
 }
 
+variable "repositoryDirecciones" {
+  type = "string"
+}
+
 module "governancePermissionPolicy" {
   source = "./developer/policy"
   account = "${var.account}"
@@ -42,6 +46,7 @@ module "governancePermissionPolicy" {
   repositoryBack = "${var.repositoryBack}"
   repositoryFront = "${var.repositoryFront}"
   apiGatewayID = "${var.apiGatewayId}"
+  repositoryDirecciones ="${var.repositoryDirecciones}"
 }
 
 module "governancePermissionGroup" {

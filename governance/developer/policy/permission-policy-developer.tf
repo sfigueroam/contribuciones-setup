@@ -22,6 +22,10 @@ variable "repositoryFront" {
   type = "string"
 }
 
+variable "repositoryDirecciones" {
+  type = "string"
+}
+
 variable "apiGatewayID" {
   type = "string"
 }
@@ -59,7 +63,8 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
     ]
     resources = [
       "arn:aws:codecommit:*:${var.account}:${var.repositoryFront}",
-      "arn:aws:codecommit:*:${var.account}:${var.repositoryBack}"
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryBack}",
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryDirecciones}"
     ]
     condition {
       test="StringLikeIfExists"
@@ -86,7 +91,8 @@ data "aws_iam_policy_document" "codecommitDataPolicy" {
     ]
     resources = [
       "arn:aws:codecommit:*:${var.account}:${var.repositoryFront}",
-      "arn:aws:codecommit:*:${var.account}:${var.repositoryBack}"
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryBack}",
+      "arn:aws:codecommit:*:${var.account}:${var.repositoryDirecciones}"
     ]
     condition {
       test="StringLikeIfExists"

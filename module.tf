@@ -79,6 +79,7 @@ locals {
   appPrefix = "tgr-${var.env}-${var.appName}"
   repositoryFront = "${var.appName}-front"
   repositoryBack = "${var.appName}-back"
+  repositoryDirecciones = "${var.appName}-direcciones"
 }
 
 data "aws_region" "current" {}
@@ -108,8 +109,9 @@ module "governance" {
   env = "${var.env}"
   repositoryBack = "${local.repositoryBack}"
   repositoryFront = "${local.repositoryFront}"
-  apiGatewayId = "${module.runtime.outApiGatewayID}"
+  apiGatewayId = "${module.runtime.apiGatewayID}"
   serverlessPolicyArn = "${module.deployment.serverlessPolicyArn}"
+  repositoryDirecciones = "${local.repositoryDirecciones}"
 }
 
 module "deployment" {
@@ -118,8 +120,8 @@ module "deployment" {
   appPrefix = "${local.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
-  apiGatewayID = "${module.runtime.outApiGatewayID}"
-  apiGatewayRootID = "${module.runtime.outApiGatewayRootID}"
+  apiGatewayID = "${module.runtime.apiGatewayID}"
+  apiGatewayRootID = "${module.runtime.apiGatewayRootID}"
   cognitoPoolArn = "${var.cognitoPoolArn}"
   cognitoAuthorizeURL = "${var.cognitoAuthorizeURL}"
   cognitoLogoutURL = "${var.cognitoLogoutURL}"
@@ -127,13 +129,17 @@ module "deployment" {
   cognitoContribRedirectURI = "${module.runtime.contribRedirectUri}"
   cognitoContribLogoutURI = "${module.runtime.contribLogoutUri}"
   endpointApiElasticsearch = "${var.endpointApiElasticsearch}"
-  endpointApiPublica = "${module.runtime.outApigatewayEndpoint}"
+  endpointApiPublica = "${module.runtime.apigatewayEndpoint}"
   repositoryFront = "${local.repositoryFront}"
   repositoryBack = "${local.repositoryBack}"
-  tokensBucketID = "${module.runtime.outTokensBucketID}"
-  parseBucketID = "${module.runtime.outParseBucketID}"
-  frontBucketID = "${module.runtime.outfrontBucketID}"
-  arnLambdaRole = "${module.runtime.outArnLambdaRole}"
+  repositoryDirecciones = "${local.repositoryDirecciones}"
+  tokensBucketID = "${module.runtime.tokensBucketID}"
+  parseBucketID = "${module.runtime.parseBucketID}"
+  frontBucketID = "${module.runtime.frontBucketID}"
+  lambdaBackRoleArn = "${module.runtime.arnLambdaBackRole}"
+  lambdaDireccionesRoleArn = "${module.runtime.arnLambdaDireccionesRole}"
+  direccionesBucketID = "${module.runtime.direccionesBucketID}"
+  elasticsearchEndpoint = "${module.runtime.elasticsearchDirectionsDomainEndpoint}"
 }
 
 terraform {

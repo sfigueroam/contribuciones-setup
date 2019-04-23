@@ -134,6 +134,7 @@ module "runtimePermissionRole" {
   env = "${var.env}"
   cloudwatchPolicy = "${module.runtimePermissionPolicy.cloudwatchPolicyArn}"
   bucketsPolicy = "${module.runtimePermissionPolicy.bucketsPolicyArn}"
+  ec2Policy = "${module.runtimePermissionPolicy.instancePolicyArn}"
 }
 
 module "runtimeElasticSearch" {
@@ -142,6 +143,14 @@ module "runtimeElasticSearch" {
   appName = "${var.appName}"
   account = "${var.account}"
   env = "${var.env}"
+}
+
+module "runtimeS3Ec2" {
+  source = "./resource/ec2"
+  appPrefix = "${var.appPrefix}"
+  appName = "${var.appName}"
+  env = "${var.env}"
+  DireccionesInsProfileEc2 = "${module.runtimePermissionRole.ec2InstanceProfileArn}"
 }
 
 output "outContribClientID" {
@@ -160,34 +169,46 @@ output "outCloufrontDomainName" {
   value = "${module.runtimeCloudfront.cloudfrontDomainName}"
 }
 
-output "outClouFrontHostedZoneID" {
+output "clouFrontHostedZoneID" {
   value = "${module.runtimeCloudfront.cloudfrontHostedZoneID}"
 }
 
-output "outArnLambdaRole" {
-  value = "${module.runtimePermissionRole.lambdaRoleArn}"
+output "arnLambdaBackRole" {
+  value = "${module.runtimePermissionRole.lambdaBackRoleArn}"
 }
 
-output "outApiGatewayID" {
+output "arnLambdaDireccionesRole" {
+  value = "${module.runtimePermissionRole.lambdaDireccionesRoleArn}"
+}
+
+output "apiGatewayID" {
   value = "${module.runtimeApiGateway.apigatewayID}"
 }
 
-output "outApiGatewayRootID" {
+output "apiGatewayRootID" {
   value = "${module.runtimeApiGateway.apigatewayRootID}"
 }
 
-output "outApigatewayEndpoint" {
+output "apigatewayEndpoint" {
   value = "${module.runtimeApiGateway.apigatewayEndpoint}"
 }
 
-output "outfrontBucketID" {
+output "frontBucketID" {
   value = "${module.runtimeS3Buckets.frontBucketID}"
 }
 
-output "outParseBucketID" {
+output "parseBucketID" {
   value = "${module.runtimeS3Buckets.parseBucketID}"
 }
 
-output "outTokensBucketID" {
+output "tokensBucketID" {
   value = "${module.runtimeS3Buckets.tokensBucketID}"
+}
+
+output "direccionesBucketID" {
+  value = "${module.runtimeS3Buckets.direccionesBucketID}"
+}
+
+output "elasticsearchDirectionsDomainEndpoint" {
+  value = "${module.runtimeElasticSearch.elasticsearchDirectionsDomainEndpoint}"
 }

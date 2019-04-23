@@ -48,6 +48,20 @@ resource "aws_s3_bucket" "bucketS3Tokens" {
   }
 }
 
+resource "aws_s3_bucket" "bucketS3Direcciones" {
+  bucket  = "${var.appPrefix}-direcciones"
+  acl     = "private"
+  versioning {
+    enabled = false
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env         = "${var.env}"
+  }
+}
+
+
+
 output "frontBucketWebsiteEndpoint" {
   value = "${aws_s3_bucket.bucketS3Front.website_endpoint}"
 }
@@ -64,6 +78,10 @@ output "tokensBucketID" {
   value = "${aws_s3_bucket.bucketS3Tokens.id}"
 }
 
+output "direccionesBucketID" {
+  value = "${aws_s3_bucket.bucketS3Direcciones.id}"
+}
+
 output "frontBucketArn" {
   value = "${aws_s3_bucket.bucketS3Front.arn}"
 }
@@ -74,4 +92,8 @@ output "parseBucketArn" {
 
 output "tokensBucketArn" {
   value = "${aws_s3_bucket.bucketS3Tokens.arn}"
+}
+
+output "direccionesBucketArn" {
+  value = "${aws_s3_bucket.bucketS3Direcciones.arn}"
 }

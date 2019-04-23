@@ -26,6 +26,10 @@ variable "repositoryBack" {
   type = "string"
 }
 
+variable "repositoryDirecciones" {
+  type = "string"
+}
+
 variable "apiGatewayID" {
   type = "string"
 }
@@ -78,6 +82,14 @@ variable "cognitoPoolArn" {
   type = "string"
 }
 
+variable "direccionesBucketID" {
+  type = "string"
+}
+
+variable "elasticsearchEndpoint" {
+  type = "string"
+}
+
 variable "kmsKeyDevQa" {
   type = "string"
   default = "arn:aws:kms:us-east-1:080540609156:key/b97e9595-822a-4c79-8c09-3eede504a639"
@@ -94,15 +106,21 @@ variable "roleArnGetCodecommit" {
   description = "Rol para obtener repositorio codecommit, y luego encriptarlo y dejarlo en S3, funciona para todos los ambientes"
 }
 
-variable "arnLambdaRole" {
+variable "lambdaBackRoleArn" {
   type = "string"
 }
+
+variable "lambdaDireccionesRoleArn" {
+  type = "string"
+}
+
 
 
 locals {
   cBuildRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
   cPipelineRoleBack = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
   cPipelineRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
+  cPipelineRoleDirecciones = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
   cPipelineBucket = "tgr-${var.env}-codepipelines"
 }
 
@@ -156,11 +174,27 @@ module "deploymentCodepipelineBack" {
   cBuildRole = "${module.deploymentPermissionRole.serverlessRoleArn}"
   cPipelineBucket = "${local.cPipelineBucket}"
   cPipelineRole = "${local.cPipelineRoleBack}"
-  lambdaRoleArn = "${var.arnLambdaRole}"
+  lambdaRoleArn = "${var.lambdaBackRoleArn}"
   repository = "${var.repositoryBack}"
   cognitoPoolArn = "${var.cognitoPoolArn}"
   kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
+}
+
+module "deploymentCodepipelineDirecciones" {
+  source = "./codepipeline/direcciones"
+  cBuildRole = "${module.deploymentPermissionRole.serverlessRoleArn}"
+  cPipelineBucket = "${local.cPipelineBucket}"
+  appName = "${var.appName}"
+  appPrefix = "${var.appPrefix}"
+  roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
+  kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
+  cPipelineRole = "${local.cPipelineRoleDirecciones}"
+  env = "${var.env}"
+  repository = "${var.repositoryDirecciones}"
+  direccionesBucketID = "${var.direccionesBucketID}"
+  elasticsearchEndpoint = "${var.elasticsearchEndpoint}"
+  lambdaDireccionesRoleArn = "${var.lambdaDireccionesRoleArn}"
 }
 
 output "serverlessPolicyArn" {

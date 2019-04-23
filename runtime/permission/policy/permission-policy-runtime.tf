@@ -66,10 +66,32 @@ resource "aws_iam_policy" "bucketPolicy" {
   policy = "${data.aws_iam_policy_document.bucketDataPolicy.json}"
 }
 
+data "aws_iam_policy_document" "ec2DataPolicy" {
+  statement {
+    sid = "invokeFuntionDirecciones"
+    actions = [
+      "lambda:InvokeFunction"
+    ]
+    resources = [
+      "arn:aws:lambda:*:*:function:${var.appPrefix}-elasticDirecciones"]
+  }
+}
+
+resource "aws_iam_policy" "ec2Policy" {
+  name = "${var.appPrefix}-lambda-direcciones"
+  path = "/"
+  description = "Otorga privilegios para la ejecutar lambda direcciones"
+  policy = "${data.aws_iam_policy_document.ec2DataPolicy.json}"
+}
+
 output "cloudwatchPolicyArn" {
   value = "${aws_iam_policy.cloudwatchPolicy.arn}"
 }
 
 output "bucketsPolicyArn" {
   value = "${aws_iam_policy.bucketPolicy.arn}"
+}
+
+output "instancePolicyArn" {
+  value = "${aws_iam_policy.ec2Policy.arn}"
 }
