@@ -50,8 +50,8 @@ variable "branch" {
   type = "map"
   default = {
     "prod" = "master"
-    "dev" = "master"
-    "qa" = "master"
+    "dev" = "develop"
+    "qa" = "release"
   }
 }
 
