@@ -75,6 +75,19 @@ data "aws_iam_policy_document" "ec2DataPolicy" {
     resources = [
       "arn:aws:lambda:*:*:function:${var.appPrefix}-elasticDirecciones"]
   }
+  statement {
+    sid = "bucketsAccess"
+    actions = [
+      "s3:List*",
+      "s3:Get*",
+      "s3:Put*",
+      "s3:DeleteObject*",
+    ]
+    resources = [
+      "arn:aws:s3:::${var.appPrefix}*",
+      "arn:aws:s3:::${var.appPrefix}*/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "ec2Policy" {
