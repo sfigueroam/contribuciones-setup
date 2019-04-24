@@ -60,6 +60,7 @@ module "governancePermissionGroup" {
   codepipelinePolicyArn = "${module.governancePermissionPolicy.codepipelinePolicyArn}"
   bucketsS3PolicyArn = "${module.governancePermissionPolicy.bucketsS3PolicyArn}"
   parametersPolicyArn = "${module.governancePermissionPolicy.parametersPolicyArn}"
+  elasticsearchPolicyArn = "${module.governancePermissionPolicy.elasticsearchPolicyArn}"
 }
 
 module "governancePermisionRole" {

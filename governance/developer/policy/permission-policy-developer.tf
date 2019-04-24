@@ -325,6 +325,41 @@ resource "aws_iam_policy" "parametersPolicy" {
 }
 
 
+data "aws_iam_policy_document" "elasticsearchDataPolicy" {
+  statement {
+    sid = "listElasticsearchAccess"
+    actions = [
+      "es:Describe*",
+      "es:List*",
+      "es:Get"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    sid = "elasticsearchAccess"
+    actions = [
+      "es:ESHttpPut",
+      "es:ESHttpPost",
+      "es:ESHttpDelete"
+    ]
+    resources = [
+      "arn:aws:es:*:${var.account}:domain/${var.appPrefix}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "elasticsearchPolicy" {
+  count = "${var.env=="dev" ? 1 : 0}"
+  name = "${var.appPrefix}-elasticsearch"
+  path = "/"
+  description = "Otorga privilegios a elasticseach de la aplicacion"
+  policy = "${data.aws_iam_policy_document.elasticsearchDataPolicy.json}"
+}
+
+
+
 output "codecommitPolicyArn" {
   value = "${element(concat(aws_iam_policy.codecommitPolicy.*.arn, list("")), 0)}"
 }
@@ -351,4 +386,8 @@ output "bucketsS3PolicyArn" {
 
 output "parametersPolicyArn" {
   value = "${element(concat(aws_iam_policy.parametersPolicy.*.arn, list("")), 0)}"
+}
+
+output "elasticsearchPolicyArn" {
+  value = "${element(concat(aws_iam_policy.elasticsearchPolicy.*.arn, list("")), 0)}"
 }
