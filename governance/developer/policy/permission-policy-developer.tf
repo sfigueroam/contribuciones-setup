@@ -30,6 +30,9 @@ variable "apiGatewayID" {
   type = "string"
 }
 
+data "aws_region" "current" {
+}
+
 data "aws_iam_policy_document" "codecommitDataPolicy" {
   statement {
     sid = "codecommitAccess"
@@ -329,9 +332,15 @@ data "aws_iam_policy_document" "elasticsearchDataPolicy" {
   statement {
     sid = "listElasticsearchAccess"
     actions = [
-      "es:Describe*",
-      "es:List*",
-      "es:Get"
+      "es:DescribeReservedElasticsearchInstanceOfferings",
+      "es:DescribeReservedElasticsearchInstances",
+      "es:ListDomainNames",
+      "es:ListElasticsearchInstanceTypes",
+      "es:DescribeElasticsearchInstanceTypeLimits",
+      "es:ListElasticsearchVersions",
+      "es:ESHttpHead",
+      "es:ESHttpGet"
+
     ]
     resources = [
       "*"
@@ -340,12 +349,19 @@ data "aws_iam_policy_document" "elasticsearchDataPolicy" {
   statement {
     sid = "elasticsearchAccess"
     actions = [
+      "es:DescribeElasticsearchDomain",
+      "es:GetCompatibleElasticsearchVersions",
+      "es:DescribeElasticsearchDomainConfig",
+      "es:GetUpgradeStatus",
+      "es:ListTags",
+      "es:DescribeElasticsearchDomains",
+      "es:GetUpgradeHistory",
+      "es:ESHttpDelete",
       "es:ESHttpPut",
-      "es:ESHttpPost",
-      "es:ESHttpDelete"
+      "es:ESHttpPost"
     ]
     resources = [
-      "arn:aws:es:*:${var.account}:domain/${var.appPrefix}"
+      "arn:aws:es:${data.aws_region.current.name}:${var.account}:domain/${var.appPrefix}"
     ]
   }
 }
@@ -357,8 +373,6 @@ resource "aws_iam_policy" "elasticsearchPolicy" {
   description = "Otorga privilegios a elasticseach de la aplicacion"
   policy = "${data.aws_iam_policy_document.elasticsearchDataPolicy.json}"
 }
-
-
 
 output "codecommitPolicyArn" {
   value = "${element(concat(aws_iam_policy.codecommitPolicy.*.arn, list("")), 0)}"

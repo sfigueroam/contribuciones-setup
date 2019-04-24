@@ -22,6 +22,10 @@ variable "ec2Policy" {
   type = "string"
 }
 
+variable "elasticsearchPolicy" {
+  type = "string"
+}
+
 data "aws_iam_policy_document" "ec2DataRole" {
   statement {
     actions = [
@@ -115,6 +119,12 @@ resource "aws_iam_role_policy_attachment" "bucketDireccionesRoleAttach" {
     "aws_iam_role.lambdaDireccionesRole"]
 }
 
+resource "aws_iam_role_policy_attachment" "elasticsearchDireccionesRoleAttach" {
+  role = "${aws_iam_role.lambdaDireccionesRole.name}"
+  policy_arn = "${var.elasticsearchPolicy}"
+  depends_on = [
+    "aws_iam_role.lambdaDireccionesRole"]
+}
 
 output "lambdaBackRoleArn" {
   value = "${aws_iam_role.lambdaBackRole.arn}"

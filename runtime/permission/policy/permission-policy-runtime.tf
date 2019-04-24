@@ -1,3 +1,7 @@
+variable "account" {
+  type = "string"
+}
+
 variable "appPrefix" {
   type = "string"
 }
@@ -12,6 +16,13 @@ variable "parseBucketID" {
 
 variable "tokensBucketID" {
   type = "string"
+}
+
+variable "direccionesBucketID" {
+  type = "string"
+}
+
+data "aws_region" "current" {
 }
 
 data "aws_iam_policy_document" "cloudwatchDataPolicy" {
@@ -33,6 +44,13 @@ data "aws_iam_policy_document" "cloudwatchDataPolicy" {
   }
 }
 
+resource "aws_iam_policy" "cloudwatchPolicy" {
+  name = "${var.appPrefix}-cloudwatch-logs"
+  path = "/"
+  description = "Otorga privilegios para la creacion de logs CloudWatch"
+  policy = "${data.aws_iam_policy_document.cloudwatchDataPolicy.json}"
+}
+
 data "aws_iam_policy_document" "bucketDataPolicy" {
   statement {
     sid = "accessObjetsS3Bucket"
@@ -48,15 +66,10 @@ data "aws_iam_policy_document" "bucketDataPolicy" {
       "arn:aws:s3:::${var.parseBucketID}/*",
       "arn:aws:s3:::${var.parseBucketID}",
       "arn:aws:s3:::${var.frontBucketID}/*",
-      "arn:aws:s3:::${var.frontBucketID}"]
+      "arn:aws:s3:::${var.frontBucketID}",
+      "arn:aws:s3:::${var.direccionesBucketID}/*",
+      "arn:aws:s3:::${var.direccionesBucketID}"]
   }
-}
-
-resource "aws_iam_policy" "cloudwatchPolicy" {
-  name = "${var.appPrefix}-cloudwatch-logs"
-  path = "/"
-  description = "Otorga privilegios para la creacion de logs CloudWatch"
-  policy = "${data.aws_iam_policy_document.cloudwatchDataPolicy.json}"
 }
 
 resource "aws_iam_policy" "bucketPolicy" {
@@ -97,6 +110,24 @@ resource "aws_iam_policy" "ec2Policy" {
   policy = "${data.aws_iam_policy_document.ec2DataPolicy.json}"
 }
 
+data "aws_iam_policy_document" "elasticsearchDataPolicy" {
+  statement {
+    sid = "elasticsearchAccess"
+    actions = [
+      "es:ES*"
+    ]
+    resources = [
+      "arn:aws:es:${data.aws_region.current.name}:${var.account}:domain/${var.appPrefix}"]
+  }
+}
+
+resource "aws_iam_policy" "elasticsearchPolicy" {
+  name = "${var.appPrefix}-elasticsearch-lambda"
+  path = "/"
+  description = "Otorga privilegios para la crear indices en elasticsearch"
+  policy = "${data.aws_iam_policy_document.elasticsearchDataPolicy.json}"
+}
+
 output "cloudwatchPolicyArn" {
   value = "${aws_iam_policy.cloudwatchPolicy.arn}"
 }
@@ -107,4 +138,8 @@ output "bucketsPolicyArn" {
 
 output "instancePolicyArn" {
   value = "${aws_iam_policy.ec2Policy.arn}"
+}
+
+output "elasticsearchPolicyArn" {
+  value = "${aws_iam_policy.elasticsearchPolicy.arn}"
 }
