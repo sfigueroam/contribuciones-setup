@@ -5,10 +5,11 @@ phases:
        - cd /tmp && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && unzip terraform.zip && mv terraform /usr/bin
    build:
      commands:
-       - aws s3 ls tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/
-       - aws s3 cp tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/${BUILD_APPNAME}-setup.auto.vars ${CODEBUILD_SRC_DIR} --recursive
+       - aws s3 ls s3://tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/
+       - aws s3 cp s3://tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/${BUILD_APPNAME}-setup.auto.vars ${CODEBUILD_SRC_DIR}
        - cd ${CODEBUILD_SRC_DIR}
        - ls -la
+       - terraform plan
 artifacts:
     files:
         - '**/*'
