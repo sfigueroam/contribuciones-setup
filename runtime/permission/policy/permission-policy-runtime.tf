@@ -2,6 +2,10 @@ variable "account" {
   type = "string"
 }
 
+variable "appName" {
+  type = "string"
+}
+
 variable "appPrefix" {
   type = "string"
 }
@@ -21,6 +25,7 @@ variable "tokensBucketID" {
 variable "direccionesBucketID" {
   type = "string"
 }
+
 
 data "aws_region" "current" {
 }
@@ -79,7 +84,7 @@ resource "aws_iam_policy" "bucketPolicy" {
   policy = "${data.aws_iam_policy_document.bucketDataPolicy.json}"
 }
 
-data "aws_iam_policy_document" "ec2DataPolicy" {
+data "aws_iam_policy_document" "ec2LambdaDataPolicy" {
   statement {
     sid = "invokeFuntionDirecciones"
     actions = [
@@ -88,26 +93,13 @@ data "aws_iam_policy_document" "ec2DataPolicy" {
     resources = [
       "arn:aws:lambda:*:*:function:${var.appPrefix}-elasticDirecciones"]
   }
-  statement {
-    sid = "bucketsAccess"
-    actions = [
-      "s3:List*",
-      "s3:Get*",
-      "s3:Put*",
-      "s3:DeleteObject*",
-    ]
-    resources = [
-      "arn:aws:s3:::${var.appPrefix}*",
-      "arn:aws:s3:::${var.appPrefix}*/*"
-    ]
-  }
 }
 
-resource "aws_iam_policy" "ec2Policy" {
+resource "aws_iam_policy" "ec2LambdaPolicy" {
   name = "${var.appPrefix}-lambda-direcciones"
   path = "/"
   description = "Otorga privilegios para la ejecutar lambda direcciones"
-  policy = "${data.aws_iam_policy_document.ec2DataPolicy.json}"
+  policy = "${data.aws_iam_policy_document.ec2LambdaDataPolicy.json}"
 }
 
 data "aws_iam_policy_document" "elasticsearchDataPolicy" {
@@ -136,8 +128,8 @@ output "bucketsPolicyArn" {
   value = "${aws_iam_policy.bucketPolicy.arn}"
 }
 
-output "instancePolicyArn" {
-  value = "${aws_iam_policy.ec2Policy.arn}"
+output "ec2LambdaPolicyArn" {
+  value = "${aws_iam_policy.ec2LambdaPolicy.arn}"
 }
 
 output "elasticsearchPolicyArn" {

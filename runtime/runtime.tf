@@ -121,6 +121,7 @@ module "runtimeRoute53" {
 
 module "runtimePermissionPolicy" {
   source = "./permission/policy"
+  appName = "${var.appName}"
   appPrefix = "${var.appPrefix}"
   account = "${var.account}"
   frontBucketID = "${module.runtimeS3Buckets.frontBucketID}"
@@ -136,7 +137,7 @@ module "runtimePermissionRole" {
   env = "${var.env}"
   cloudwatchPolicy = "${module.runtimePermissionPolicy.cloudwatchPolicyArn}"
   bucketsPolicy = "${module.runtimePermissionPolicy.bucketsPolicyArn}"
-  ec2Policy = "${module.runtimePermissionPolicy.instancePolicyArn}"
+  ec2LambdaPolicy = "${module.runtimePermissionPolicy.ec2LambdaPolicyArn}"
   elasticsearchPolicy = "${module.runtimePermissionPolicy.elasticsearchPolicyArn}"
 }
 

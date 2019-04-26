@@ -18,7 +18,7 @@ variable "bucketsPolicy" {
   type = "string"
 }
 
-variable "ec2Policy" {
+variable "ec2LambdaPolicy" {
   type = "string"
 }
 
@@ -48,9 +48,16 @@ resource "aws_iam_role" "ec2Role" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "ec2RoleAttach" {
+resource "aws_iam_role_policy_attachment" "ec2LambdaRoleAttach" {
   role = "${aws_iam_role.ec2Role.name}"
-  policy_arn = "${var.ec2Policy}"
+  policy_arn = "${var.ec2LambdaPolicy}"
+  depends_on = [
+    "aws_iam_role.ec2Role"]
+}
+
+resource "aws_iam_role_policy_attachment" "ec2BucketsRoleAttach" {
+  role = "${aws_iam_role.ec2Role.name}"
+  policy_arn = "${var.bucketsPolicy}"
   depends_on = [
     "aws_iam_role.ec2Role"]
 }
@@ -82,15 +89,6 @@ resource "aws_iam_role" "lambdaBackRole" {
   }
 }
 
-resource "aws_iam_role" "lambdaDireccionesRole" {
-  name = "${var.appPrefix}-direcciones-lambda"
-  assume_role_policy = "${data.aws_iam_policy_document.lambdaDataRole.json}"
-  tags = {
-    Application = "${var.appName}"
-    Env = "${var.env}"
-  }
-}
-
 resource "aws_iam_role_policy_attachment" "cloudwatchBackRoleAttach" {
   role = "${aws_iam_role.lambdaBackRole.name}"
   policy_arn = "${var.cloudwatchPolicy}"
@@ -103,6 +101,15 @@ resource "aws_iam_role_policy_attachment" "bucketsBackRoleAttach" {
   policy_arn = "${var.bucketsPolicy}"
   depends_on = [
     "aws_iam_role.lambdaBackRole"]
+}
+
+resource "aws_iam_role" "lambdaDireccionesRole" {
+  name = "${var.appPrefix}-direcciones-lambda"
+  assume_role_policy = "${data.aws_iam_policy_document.lambdaDataRole.json}"
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatchDireccionesRoleAttach" {
@@ -122,6 +129,13 @@ resource "aws_iam_role_policy_attachment" "bucketDireccionesRoleAttach" {
 resource "aws_iam_role_policy_attachment" "elasticsearchDireccionesRoleAttach" {
   role = "${aws_iam_role.lambdaDireccionesRole.name}"
   policy_arn = "${var.elasticsearchPolicy}"
+  depends_on = [
+    "aws_iam_role.lambdaDireccionesRole"]
+}
+
+resource "aws_iam_role_policy_attachment" "lambdaDireccionesRoleAttach" {
+  role = "${aws_iam_role.lambdaDireccionesRole.name}"
+  policy_arn = "${var.ec2LambdaPolicy}"
   depends_on = [
     "aws_iam_role.lambdaDireccionesRole"]
 }
