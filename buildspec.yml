@@ -2,12 +2,11 @@ version: 0.1
 phases:
    install:
      commands:
-       - cd /tmp && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && unzip terraform.zip && mv terraform /usr/bin
+       - cd /tmp && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip && unzip terraform.zip && mv terraform /usr/bin
    build:
      commands:
        - aws s3 ls s3://tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/
        - aws s3 cp s3://tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/${BUILD_APPNAME}-setup.auto.tfvars ${CODEBUILD_SRC_DIR}
-       - echo "Archivo ${BUILD_APPNAME}-setup.auto.tfvars"
        - cat ${BUILD_APPNAME}-setup.auto.tfvars
        - terraform init -backend-config="bucket=tgr-${BUILD_ENV}-terraform-state" -backend-config="key=tgr-${BUILD_ENV}-${BUILD_APPNAME}-setup"
        - terraform apply -auto-approve
