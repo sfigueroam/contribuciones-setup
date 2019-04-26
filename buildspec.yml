@@ -9,6 +9,7 @@ phases:
        - aws s3 cp s3://tgr-${BUILD_ENV}-terraform-config/${BUILD_APPNAME}-setup/${BUILD_APPNAME}-setup.auto.vars ${CODEBUILD_SRC_DIR}
        - cd ${CODEBUILD_SRC_DIR}
        - ls -la
+       - terraform init -backend-config="bucket=tgr-${BUILD_ENV}-terraform-state" -backend-config="key=tgr-${BUILD_ENV}-contribuciones-metasetup"
        - terraform plan
 artifacts:
     files:
