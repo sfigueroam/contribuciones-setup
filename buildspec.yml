@@ -8,7 +8,7 @@ phases:
       - touch ${BUILD_APPNAME}-setup.auto.tfvars
       - echo ${BUILD_TERRAFORM_TFVARS}
       - echo ${BUILD_TERRAFORM_TFVARS_SECURE}
-      - echo ${BUILD_TERRAFORM_TFVARS}  > ${BUILD_APPNAME}-setup-global.auto.tfvars
+      - echo ${BUILD_TERRAFORM_TFVARS} > ${BUILD_APPNAME}-setup-global.auto.tfvars
       - echo ${BUILD_TERRAFORM_TFVARS_SECURE} > ${BUILD_APPNAME}-setup-secure.auto.tfvars
       - cat ${BUILD_APPNAME}-setup-global.auto.tfvars
       - cat ${BUILD_APPNAME}-setup-secure.auto.tfvars
