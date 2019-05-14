@@ -149,14 +149,6 @@ module "runtimeElasticSearch" {
   env = "${var.env}"
 }
 
-module "runtimeS3Ec2" {
-  source = "./resource/ec2"
-  appPrefix = "${var.appPrefix}"
-  appName = "${var.appName}"
-  env = "${var.env}"
-  DireccionesInsProfileEc2 = "${module.runtimePermissionRole.ec2InstanceProfileArn}"
-}
-
 output "outContribClientID" {
   value = "${module.runtimeCognitoAppClients.contribClientID}"
 }
