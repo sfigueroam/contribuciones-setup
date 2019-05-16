@@ -58,6 +58,10 @@ variable "roleArnGetCodecommit" {
   type = "string"
 }
 
+variable "elasticsearchURL" {
+  type = "string"
+}
+
 variable "branch" {
   type = "map"
   default = {
@@ -184,6 +188,11 @@ resource "aws_codebuild_project" "codebuildBack" {
       name = "BUILD_RECAPTCHA_THRESHOLD"
       value = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/threshold"
       type = "PARAMETER_STORE"
+    }
+
+    environment_variable {
+      name = "BUILD_ELASTICSEARCH_URL"
+      value = "${var.elasticsearchURL}"
     }
   }
 

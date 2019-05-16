@@ -95,7 +95,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "apigateway:GET",
       "apigateway:OPTIONS",
       "apigateway:POST",
-      "apigateway:PUT"
+      "apigateway:PUT",
+      "apigateway:PATCH"
     ]
     resources = [
       "arn:aws:apigateway:*::/restapis/${var.apiGatewayID}/*"

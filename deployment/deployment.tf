@@ -114,8 +114,6 @@ variable "lambdaDireccionesRoleArn" {
   type = "string"
 }
 
-
-
 locals {
   cBuildRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
   cPipelineRoleBack = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
@@ -179,6 +177,7 @@ module "deploymentCodepipelineBack" {
   cognitoPoolArn = "${var.cognitoPoolArn}"
   kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
+  elasticsearchURL ="${var.elasticsearchEndpoint}"
 }
 
 module "deploymentCodepipelineDirecciones" {
