@@ -80,7 +80,7 @@ data "aws_iam_policy_document" "lambdaDataRole" {
   }
 }
 
-resource "aws_iam_role" "lambdaBackRole" {
+resource "aws_iam_role" "lambdaRole" {
   name = "${var.appPrefix}-back-lambda"
   assume_role_policy = "${data.aws_iam_policy_document.lambdaDataRole.json}"
   tags = {
@@ -89,18 +89,18 @@ resource "aws_iam_role" "lambdaBackRole" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatchBackRoleAttach" {
-  role = "${aws_iam_role.lambdaBackRole.name}"
+resource "aws_iam_role_policy_attachment" "cloudwatchRoleAttach" {
+  role = "${aws_iam_role.lambdaRole.name}"
   policy_arn = "${var.cloudwatchPolicy}"
   depends_on = [
-    "aws_iam_role.lambdaBackRole"]
+    "aws_iam_role.lambdaRole"]
 }
 
-resource "aws_iam_role_policy_attachment" "bucketsBackRoleAttach" {
-  role = "${aws_iam_role.lambdaBackRole.name}"
+resource "aws_iam_role_policy_attachment" "bucketsRoleAttach" {
+  role = "${aws_iam_role.lambdaRole.name}"
   policy_arn = "${var.bucketsPolicy}"
   depends_on = [
-    "aws_iam_role.lambdaBackRole"]
+    "aws_iam_role.lambdaRole"]
 }
 
 resource "aws_iam_role" "lambdaDireccionesRole" {
@@ -140,8 +140,8 @@ resource "aws_iam_role_policy_attachment" "lambdaDireccionesRoleAttach" {
     "aws_iam_role.lambdaDireccionesRole"]
 }
 
-output "lambdaBackRoleArn" {
-  value = "${aws_iam_role.lambdaBackRole.arn}"
+output "lambdaRoleArn" {
+  value = "${aws_iam_role.lambdaRole.arn}"
 }
 
 output "lambdaDireccionesRoleArn" {
