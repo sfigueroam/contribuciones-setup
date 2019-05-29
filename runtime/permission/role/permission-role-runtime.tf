@@ -140,7 +140,7 @@ resource "aws_iam_role_policy_attachment" "lambdaDireccionesRoleAttach" {
     "aws_iam_role.lambdaDireccionesRole"]
 }
 
-output "lambdaRoleArn" {
+output "lambdaBackRoleArn" {
   value = "${aws_iam_role.lambdaRole.arn}"
 }
 
