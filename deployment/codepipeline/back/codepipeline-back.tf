@@ -66,6 +66,7 @@ variable "branch" {
   type = "map"
   default = {
     "prod" = "master"
+    "stag" = "staging"
     "dev" = "develop"
     "qa" = "release"
   }

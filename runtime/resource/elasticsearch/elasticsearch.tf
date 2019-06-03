@@ -1,12 +1,15 @@
 variable "appPrefix" {
   type="string"
 }
+
 variable "appName" {
   type="string"
 }
+
 variable "env" {
   type="string"
 }
+
 variable "account" {
   type="string"
 }
@@ -28,6 +31,7 @@ data "aws_iam_policy_document" "elasticSearchAccessDataPolicy" {
 }
 
 resource "aws_elasticsearch_domain" "elasticsearchDirectionsDomain" {
+  count  = "${var.env=="stag" ? 0 : 1}"
   domain_name="${var.appPrefix}"
   elasticsearch_version="6.3"
   access_policies="${data.aws_iam_policy_document.elasticSearchAccessDataPolicy.json}"
@@ -54,16 +58,20 @@ resource "aws_elasticsearch_domain" "elasticsearchDirectionsDomain" {
     Application="${var.appName}"
     Env="${var.env}"
   }
+
   lifecycle {
     ignore_changes  = ["access_policies"]
   }
-
 }
 
 output "elasticsearchDirectionsDomainArn" {
-  value="${aws_elasticsearch_domain.elasticsearchDirectionsDomain.arn}"
+  #value = "${var.env == "stag" ? element(concat(data.terraform_remote_state.contribucionesProdSetup.*.elasticsearchDirectionsDomainArn, list("")), 0) : element(concat(aws_elasticsearch_domain.elasticsearchDirectionsDomain.*.arn, list("")), 0)}"
+  value = "${element(concat(aws_elasticsearch_domain.elasticsearchDirectionsDomain.*.arn, list("")), 0)}"
+  #value = "${local.elasticsearchDirectionsDomainArn}"
 }
 
 output "elasticsearchDirectionsDomainEndpoint" {
-  value="${aws_elasticsearch_domain.elasticsearchDirectionsDomain.endpoint}"
+  #value = "${var.env == "stag" ? element(concat(data.terraform_remote_state.contribucionesProdSetup.*.elasticsearchDirectionsDomainEndpoint, list("")), 0) : element(concat(aws_elasticsearch_domain.elasticsearchDirectionsDomain.*.endpoint, list("")), 0)}"
+  value = "${element(concat(aws_elasticsearch_domain.elasticsearchDirectionsDomain.*.endpoint, list("")), 0)}"
+  #value = "${local.elasticsearchDirectionsDomainEndpoint}"
 }

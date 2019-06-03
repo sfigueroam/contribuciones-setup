@@ -70,6 +70,12 @@ variable "endpointApiElasticsearch" {
   default = "https://w2jmtnip5c.execute-api.us-east-1.amazonaws.com/dev"
 }
 
+variable "elasticsearchDirectionsDomainEndpointProd" {
+  type = "string"
+  default = "search-tgr-prod-contribuciones-46l2jwdqe3u7gvdogehlswzfme.us-east-1.es.amazonaws.com"
+}
+
+
 //variable "endpointApiPublica" {
 //  type = "string"
 //  default = "https://u3aeivcwv0.execute-api.us-east-1.amazonaws.com/dev"
@@ -139,7 +145,7 @@ module "deployment" {
   lambdaBackRoleArn = "${module.runtime.arnLambdaBackRole}"
   lambdaDireccionesRoleArn = "${module.runtime.arnLambdaDireccionesRole}"
   direccionesBucketID = "${module.runtime.direccionesBucketID}"
-  elasticsearchEndpoint = "${module.runtime.elasticsearchDirectionsDomainEndpoint}"
+  elasticsearchEndpoint = "${var.env=="stag" ? var.elasticsearchDirectionsDomainEndpointProd : module.runtime.elasticsearchDirectionsDomainEndpoint}"
 }
 
 terraform {

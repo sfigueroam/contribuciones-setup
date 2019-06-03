@@ -120,6 +120,17 @@ locals {
   cPipelineRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
   cPipelineRoleDirecciones = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
   cPipelineBucket = "tgr-${var.env}-codepipelines"
+  env = "${var.env == "stag" ? "prod" : var.env}"
+}
+
+data "terraform_remote_state" "contribucionesProdSetup" {
+  count  = "${var.env=="stag" ? 0 : 1}"
+  backend = "s3"
+  config {
+    bucket  = "tgr-${local.env}-terraform-state"
+    key     = "tgr-${local.env}-contribuciones-setup"
+    region  = "us-east-1"
+  }
 }
 
 module "deploymentPermissionPolicy" {
@@ -156,7 +167,7 @@ module "deploymentCodepipelineFront" {
   cognitoContribLogoutURI = "${var.cognitoContribLogoutURI}"
   backEndpoint="${var.endpointApiPublica}" //"${module.api-gateway.endpoint}"
   endpointApiElasticsearch="${var.endpointApiElasticsearch}" //"${var.endpointApiElasticsearch}"
-  kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
+  kmsKey = "${var.env=="prod" || var.env=="stag" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
 }
 
@@ -175,7 +186,7 @@ module "deploymentCodepipelineBack" {
   lambdaRoleArn = "${var.lambdaBackRoleArn}"
   repository = "${var.repositoryBack}"
   cognitoPoolArn = "${var.cognitoPoolArn}"
-  kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
+  kmsKey = "${var.env=="prod" || var.env=="stag" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
   elasticsearchURL ="${var.elasticsearchEndpoint}"
 }
@@ -187,7 +198,7 @@ module "deploymentCodepipelineDirecciones" {
   appName = "${var.appName}"
   appPrefix = "${var.appPrefix}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
-  kmsKey = "${var.env=="prod" ? var.kmsKeyProd : var.kmsKeyDevQa}"
+  kmsKey = "${var.env=="prod" || var.env=="stag" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   cPipelineRole = "${local.cPipelineRoleDirecciones}"
   env = "${var.env}"
   repository = "${var.repositoryDirecciones}"

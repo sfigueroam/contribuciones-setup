@@ -208,3 +208,7 @@ output "direccionesBucketID" {
 output "elasticsearchDirectionsDomainEndpoint" {
   value = "${module.runtimeElasticSearch.elasticsearchDirectionsDomainEndpoint}"
 }
+
+output "elasticsearchDirectionsDomainArn" {
+  value = "${module.runtimeElasticSearch.elasticsearchDirectionsDomainArn}"
+}
