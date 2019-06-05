@@ -70,22 +70,17 @@ variable "endpointApiElasticsearch" {
   default = "https://w2jmtnip5c.execute-api.us-east-1.amazonaws.com/dev"
 }
 
-variable "elasticsearchDirectionsDomainEndpointProd" {
+variable "direccionesElasticsearchDomain" {
   type = "string"
-  default = "search-tgr-prod-contribuciones-46l2jwdqe3u7gvdogehlswzfme.us-east-1.es.amazonaws.com"
+  default = ""
 }
-
-
-//variable "endpointApiPublica" {
-//  type = "string"
-//  default = "https://u3aeivcwv0.execute-api.us-east-1.amazonaws.com/dev"
-//}
 
 locals {
   appPrefix = "tgr-${var.env}-${var.appName}"
   repositoryFront = "${var.appName}-front"
   repositoryBack = "${var.appName}-back"
   repositoryDirecciones = "${var.appName}-direcciones"
+  direccionesElasticsearchDomainEndpoint = "${var.direccionesElasticsearchDomain =="" ? module.runtime.elasticsearchDirectionsDomainEndpoint: var.direccionesElasticsearchDomain}"
 }
 
 data "aws_region" "current" {}
@@ -100,8 +95,10 @@ module "runtime" {
   appFrontSubdomain = "${var.appFrontSubdomain}"
   appFrontDomain = "${var.appFrontDomain}"
   cognitoPoolId = "${var.cognitoPoolId}"
-  cognitoProviders = ["${var.cognitoProviders}"]
-  cognitoReadAttributes = ["${var.cognitoReadAttributes}"]
+  cognitoProviders = [
+    "${var.cognitoProviders}"]
+  cognitoReadAttributes = [
+    "${var.cognitoReadAttributes}"]
   acmCertificateArn = "${var.acmCertificateArn}"
   route53ZoneId = "${var.route53ZoneId}"
   region = "${data.aws_region.current.name}"
@@ -145,7 +142,11 @@ module "deployment" {
   lambdaBackRoleArn = "${module.runtime.arnLambdaBackRole}"
   lambdaDireccionesRoleArn = "${module.runtime.arnLambdaDireccionesRole}"
   direccionesBucketID = "${module.runtime.direccionesBucketID}"
-  elasticsearchEndpoint = "${var.env=="stag" ? var.elasticsearchDirectionsDomainEndpointProd : module.runtime.elasticsearchDirectionsDomainEndpoint}"
+  elasticsearchEndpoint = "${local.direccionesElasticsearchDomainEndpoint}"
+}
+
+output "direccionesElasticsearchDomain" {
+  value = "${module.runtime.elasticsearchDirectionsDomainEndpoint}"
 }
 
 terraform {

@@ -30,10 +30,6 @@ variable "cPipelineBucket" {
   type = "string"
 }
 
-variable "endpointApiElasticsearch" {
-  type = "string"
-}
-
 variable "backEndpoint" {
   type = "string"
 }
@@ -98,11 +94,6 @@ resource "aws_codebuild_project" "codebuildFront" {
     environment_variable {
       name = "S3_BUCKET"
       value = "${var.bucketFrontID}"
-    }
-
-    environment_variable {
-      name = "BUILD_ELASTICSEARCH_ENDPOINT"
-      value = "${var.endpointApiElasticsearch}"
     }
 
     environment_variable {

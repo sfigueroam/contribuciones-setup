@@ -166,7 +166,6 @@ module "deploymentCodepipelineFront" {
   cognitoContribRedirectURI = "${var.cognitoContribRedirectURI}"
   cognitoContribLogoutURI = "${var.cognitoContribLogoutURI}"
   backEndpoint="${var.endpointApiPublica}" //"${module.api-gateway.endpoint}"
-  endpointApiElasticsearch="${var.endpointApiElasticsearch}" //"${var.endpointApiElasticsearch}"
   kmsKey = "${var.env=="prod" || var.env=="stag" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
 }

@@ -57,6 +57,7 @@ variable "branch" {
 }
 
 resource "aws_codebuild_project" "codebuildDirecciones" {
+  count = "${var.env == "qa" || var.env == "prod" ? 1 : 0}"
   name = "${var.appPrefix}-direcciones"
   build_timeout = "15"
   service_role = "${var.cBuildRole}"
@@ -109,6 +110,8 @@ resource "aws_codebuild_project" "codebuildDirecciones" {
 }
 
 resource "aws_codepipeline" "codepipelineDirecciones" {
+  count = "${var.env == "qa" || var.env == "prod" ? 1 : 0}"
+
   name     = "${var.appPrefix}-direcciones"
   role_arn = "${var.cPipelineRole}"
 
