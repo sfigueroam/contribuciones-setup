@@ -109,9 +109,6 @@ module "runtimeCloudfront" {
 
 module "runtimeRoute53" {
   source = "./resource/route53"
-  providers = {
-    aws = "aws.prodDomainAccount"
-  }
   cloudfrontDomainName = "${module.runtimeCloudfront.cloudfrontDomainName}"
   cloudfrontHostedZoneID = "${module.runtimeCloudfront.cloudfrontHostedZoneID}"
   subdomain = "${var.appFrontSubdomain}"
