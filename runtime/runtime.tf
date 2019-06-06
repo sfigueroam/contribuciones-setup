@@ -68,9 +68,6 @@ variable "cognitoReadAttributes" {
 
 module "runtimeCognitoAppClients" {
   source = "./resource/cognito"
-  providers = {
-    aws = "aws.prodDomainAccount"
-  }
   appPrefix = "${var.appPrefix}"
   cloudfrontAlias = "${var.appFrontSubdomain}.${var.appFrontDomain}"
   cognitoReadAttributes = [
@@ -209,3 +206,4 @@ output "elasticsearchDirectionsDomainEndpoint" {
 output "elasticsearchDirectionsDomainArn" {
   value = "${module.runtimeElasticSearch.elasticsearchDirectionsDomainArn}"
 }
+
