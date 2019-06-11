@@ -70,3 +70,10 @@ module "governancePermisionRole" {
   env = "${var.env}"
   serverlessPolicyArn = "${var.serverlessPolicyArn}"
 }
+
+module "governancePermisionQa" {
+  source = "./tester"
+  appPrefix = "${var.appPrefix}"
+  appName = "${var.appName}"
+  env = "${var.env}"
+}

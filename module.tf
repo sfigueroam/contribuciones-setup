@@ -72,7 +72,7 @@ variable "endpointApiElasticsearch" {
 
 variable "direccionesElasticsearchDomain" {
   type = "string"
-  default = ""
+  default = "search-tgr-qa-contribuciones-hsco4tfnkz2jfjpxxv3znhxnqu.us-east-1.es.amazonaws.com"
 }
 
 locals {
