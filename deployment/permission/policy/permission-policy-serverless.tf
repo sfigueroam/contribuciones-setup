@@ -99,7 +99,9 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "apigateway:PATCH"
     ]
     resources = [
-      "arn:aws:apigateway:*::/restapis/${var.apiGatewayID}/*"
+      "arn:aws:apigateway:*::/restapis/${var.apiGatewayID}/*",
+      "arn:aws:apigateway:*::/tags/*"
+
     ]
   }
   statement {
