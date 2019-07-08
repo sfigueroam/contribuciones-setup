@@ -161,6 +161,12 @@ resource "aws_codebuild_project" "codebuildFront" {
       value = "/tgr/${var.env}/${var.appName}/front/google-analytics-code"
       type = "PARAMETER_STORE"
     }
+
+    environment_variable {
+      name = "BUILD_NEWRELIC_APPLICATION_ID"
+      value = "/tgr/${var.env}/${var.appName}/front/newrelic-application-id"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {

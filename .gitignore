@@ -2,3 +2,4 @@
 terraform.tfvars.qa
 terraform.tfvars.dev
 terraform.tfvars
+.idea/
