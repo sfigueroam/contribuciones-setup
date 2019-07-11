@@ -97,6 +97,11 @@ resource "aws_codebuild_project" "codebuildFront" {
     }
 
     environment_variable {
+      name = "BUILD_ENV"
+      value = "${var.env}"
+    }
+
+    environment_variable {
       name = "BUILD_BACK_ENDPOINT"
       value = "${var.backEndpoint}"
     }
