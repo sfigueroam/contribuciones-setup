@@ -432,7 +432,36 @@ resource "aws_codebuild_project" "codebuildBack" {
       value = "${var.elasticsearchURL}"
     }
 
-    
+    environment_variable {
+      name = "BUILD_WSA_GRANT_TYPE"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/grant-type"
+      type = "PARAMETER_STORE"
+    }
+    environment_variable {
+      name = "BUILD_WSA_CLIENT_SECRET"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/client-secret"
+      type = "PARAMETER_STORE"
+    }
+    environment_variable {
+      name = "BUILD_WSA_CLIENT_ID"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/client-id"
+      type = "PARAMETER_STORE"
+    }
+    environment_variable {
+      name = "BUILD_WSA_SCOPE"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/scope"
+      type = "PARAMETER_STORE"
+    }
+    environment_variable {
+      name = "BUILD_WSA_HOST_API"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/host"
+      type = "PARAMETER_STORE"
+    }
+    environment_variable {
+      name = "BUILD_WSA_HOST_TOKEN"
+      value = "/tgr/${var.env}/${var.appName}/back/ws-nube/host-token"
+      type = "PARAMETER_STORE"
+    }
   }
 
   source {
