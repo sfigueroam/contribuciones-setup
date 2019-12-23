@@ -89,7 +89,7 @@ resource "aws_ssm_parameter" "back-ws-tierra-grant-type" {
 
 resource "aws_ssm_parameter" "back-ws-tierra-client-secret" {
   name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-secret"
-  type = "String"
+  type = "StringList"
   value = "default_value"
   lifecycle {
     ignore_changes = [ "value" ]
@@ -103,7 +103,7 @@ resource "aws_ssm_parameter" "back-ws-tierra-client-secret" {
 
 resource "aws_ssm_parameter" "back-ws-tierra-client-id" {
   name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-id"
-  type = "String"
+  type = "StringList"
   value = "default_value"
   lifecycle {
     ignore_changes = [ "value" ]
@@ -117,7 +117,7 @@ resource "aws_ssm_parameter" "back-ws-tierra-client-id" {
 
 resource "aws_ssm_parameter" "back-ws-tierra-scope" {
   name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/scope"
-  type = "String"
+  type = "StringList"
   value = "default_value"
   lifecycle {
     ignore_changes = [ "value" ]

@@ -72,6 +72,98 @@ variable "branch" {
   }
 }
 
+resource "aws_ssm_parameter" "front-cuenta-usuario-url" {
+  name = "/tgr/${var.env}/${var.appName}/front/cuenta-usuario-url"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-recaptcha-key-v2" {
+  name = "/tgr/${var.env}/${var.appName}/front/recaptcha/key/v2"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-recaptcha-key-v3" {
+  name = "/tgr/${var.env}/${var.appName}/front/recaptcha/key/v3"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-device-info-endpoint" {
+  name = "/tgr/${var.env}/${var.appName}/front/device-info-endpoint"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-google-analytics-code" {
+  name = "/tgr/${var.env}/${var.appName}/front/google-analytics-code"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-newrelic-application-id" {
+  name = "/tgr/${var.env}/${var.appName}/front/newrelic-application-id"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "front-url-pago-tgr" {
+  name = "/tgr/${var.env}/${var.appName}/front/url-pago-tgr"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
 resource "aws_codebuild_project" "codebuildFront" {
   name = "${var.appPrefix}-front"
   build_timeout = "15"
