@@ -72,6 +72,242 @@ variable "branch" {
   }
 }
 
+
+resource "aws_ssm_parameter" "back-ws-tierra-grant-type" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/grant-type"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-ws-tierra-client-secret" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-secret"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-ws-tierra-client-id" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/client-id"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-ws-tierra-scope" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/scope"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-ws-tierra-host" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/host"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-ws-tierra-port" {
+  name = "/tgr/${var.env}/${var.appName}/back/ws-tierra/port"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-recaptcha-api-host" {
+  name = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/host"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-recaptcha-api-idapp-v2" {
+  name = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/idapp/v2"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-recaptcha-api-idapp-v3" {
+  name = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/idapp/v3"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-recaptcha-api-path" {
+  name = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/path"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "back-recaptcha-api-threshold" {
+  name = "/tgr/${var.env}/${var.appName}/back/recaptcha/api/threshold"
+  type = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+##
+
+resource "aws_ssm_parameter" "grant-type" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/grant-type"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
+resource "aws_ssm_parameter" "client-secret" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/client-secret"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "client-id" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/client-id"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "scope" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/scope"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "host" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/host"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+resource "aws_ssm_parameter" "host-token" {
+  name  = "/tgr/${var.env}/${var.appName}/back/ws-nube/host-token"
+  type  = "String"
+  value = "default_value"
+  lifecycle {
+    ignore_changes = [ "value" ]
+  }
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+}
+
+
 resource "aws_codebuild_project" "codebuildBack" {
   name = "${var.appPrefix}-back"
   build_timeout = "15"
@@ -195,6 +431,8 @@ resource "aws_codebuild_project" "codebuildBack" {
       name = "BUILD_ELASTICSEARCH_URL"
       value = "${var.elasticsearchURL}"
     }
+
+    
   }
 
   source {
