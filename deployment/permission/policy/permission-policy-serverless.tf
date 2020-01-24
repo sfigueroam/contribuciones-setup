@@ -165,7 +165,8 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "ssm:GetParameters"
     ]
     resources = [
-      "arn:aws:ssm:*:*:parameter/tgr/${var.env}/${var.appName}/*"
+      "arn:aws:ssm:*:*:parameter/tgr/${var.env}/${var.appName}/*",
+      "arn:aws:ssm:*:*:parameter/tgr/sonarqube/*"
     ]
   }
 }

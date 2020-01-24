@@ -278,6 +278,77 @@ resource "aws_codebuild_project" "codebuildFront" {
 }
 
 
+resource "aws_codebuild_project" "codebuildSonarQubeFront" {
+  name = "${var.appPrefix}-sonarQube-front"
+  build_timeout = "15"
+  service_role = "${var.cBuildRole}"
+  encryption_key = "${var.kmsKey}"
+  cache {
+    type = "NO_CACHE"
+  }
+
+  artifacts {
+    type = "CODEPIPELINE"
+  }
+
+  environment {
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image = "aws/codebuild/nodejs:8.11.0"
+    type = "LINUX_CONTAINER"
+
+    environment_variable =
+    [
+      {
+        name = "BUILD_ENV"
+        value = "${var.env}"
+      },
+      {
+        name = "BUILD_APP_NAME"
+        value = "${var.appName}"
+      },
+      {
+        name = "BUILD_SONARQUBE_HOST"
+        value = "/tgr/sonarqube/host"
+        type = "PARAMETER_STORE"
+      },
+      {
+        name = "BUILD_SONARQUBE_LOGIN"
+        value = "/tgr/sonarqube/login"
+        type = "PARAMETER_STORE"
+      },
+      {
+        name = "BUILD_SONARQUBE_URL_DESCARGA"
+        value = "/tgr/sonarqube/url-descarga"
+        type = "PARAMETER_STORE"
+      },
+      {
+        name = "BUILD_SONARQUBE_NOMBRE_ARCHIVO"
+        value = "/tgr/sonarqube/nombre-archivo"
+        type = "PARAMETER_STORE"
+      },
+      {
+        name = "BUILD_SONARQUBE_NOMBRE_CARPETA"
+        value = "/tgr/sonarqube/nombre-carpeta"
+        type = "PARAMETER_STORE"
+      }
+
+    ]
+
+  }
+  source {
+    type = "CODEPIPELINE"
+    buildspec = "${file("${path.module}/buildspec-sonarqube-front.yml")}"
+  }
+
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
+
+}
+
+
+
 resource "aws_codepipeline" "codepipelineFront" {
   name     = "${var.appPrefix}-front"
   role_arn = "${var.cPipelineRole}"
@@ -318,7 +389,25 @@ resource "aws_codepipeline" "codepipelineFront" {
       }
     }
   }
-    
+
+  stage {
+    name = "SonarQube"
+
+    action {
+      name = "SonarQube-Publish"
+      category = "Build"
+      owner = "AWS"
+      provider = "CodeBuild"
+      version = "1"
+      input_artifacts = ["SourceArtifact"]
+
+      configuration {
+        ProjectName = "${aws_codebuild_project.codebuildSonarQubeFront.name}"
+      }
+    }
+  }
+
+
   artifact_store {
 	location  = "${var.cPipelineBucket}"
 	type = "S3"
