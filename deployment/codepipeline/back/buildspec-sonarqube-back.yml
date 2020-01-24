@@ -4,8 +4,6 @@ phases:
     commands:
       - wget ${BUILD_SONARQUBE_URL_DESCARGA}
       - unzip ${BUILD_SONARQUBE_NOMBRE_ARCHIVO}.zip
-      - echo "---------- TYPESCRIPT ---------"
-      - npm install -D --prefix ./front typescript
       - echo "---------- PATH ---------"
       - export myhome=`pwd`
       - export PATH=$PATH:$myhome/${BUILD_SONARQUBE_NOMBRE_CARPETA}/bin
