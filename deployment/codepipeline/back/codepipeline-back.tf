@@ -332,6 +332,11 @@ resource "aws_codebuild_project" "codebuildBack" {
     }
 
     environment_variable {
+      name = "BUILD_APP_NAME"
+      value = "${var.env}"
+    }
+
+    environment_variable {
       name = "BUILD_LAMBDA_ROLE_ARN"
       value = "${var.lambdaRoleArn}"
     }
