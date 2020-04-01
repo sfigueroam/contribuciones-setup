@@ -374,6 +374,33 @@ resource "aws_iam_policy" "elasticsearchPolicy" {
   policy = "${data.aws_iam_policy_document.elasticsearchDataPolicy.json}"
 }
 
+
+
+data "aws_iam_policy_document" "dynamoDBDataPolicy"{
+  statement {
+    sid = "dynamoDBAccess"
+    actions = [
+      "dynamodb:*"
+    ]
+    resources = [
+      "arn:aws:dynamodb:us-east-1:*:table/${var.appPrefix}*",
+      "arn:aws:dynamodb:us-east-1:*:table/${var.appPrefix}*/index/*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "dynamoDBPolicy" {
+  count = "${var.env=="dev" ? 1 : 0}"
+  name = "${var.appPrefix}-dynamodb"
+  path = "/"
+  policy = "${data.aws_iam_policy_document.dynamoDBDataPolicy.json}"
+}
+
+
+output "dynamoDBPolicyArn" {
+  value = "${element(concat(aws_iam_policy.dynamoDBPolicy.*.arn, list("")), 0)}"
+}
+
 output "codecommitPolicyArn" {
   value = "${element(concat(aws_iam_policy.codecommitPolicy.*.arn, list("")), 0)}"
 }

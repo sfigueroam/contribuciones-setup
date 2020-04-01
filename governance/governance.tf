@@ -61,6 +61,7 @@ module "governancePermissionGroup" {
   bucketsS3PolicyArn = "${module.governancePermissionPolicy.bucketsS3PolicyArn}"
   parametersPolicyArn = "${module.governancePermissionPolicy.parametersPolicyArn}"
   elasticsearchPolicyArn = "${module.governancePermissionPolicy.elasticsearchPolicyArn}"
+  dynamoDBPolicyArn = "${module.governancePermissionPolicy.dynamoDBPolicyArn}"
 }
 
 module "governancePermisionRole" {

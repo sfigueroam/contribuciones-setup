@@ -38,6 +38,10 @@ variable "elasticsearchPolicyArn" {
   type = "string"
 }
 
+variable "dynamoDBPolicyArn" {
+  type = "string"
+}
+
 
 resource "aws_iam_group" "developGroup" {
   count = "${var.env=="dev" ? 1 : 0}"
@@ -98,5 +102,12 @@ resource "aws_iam_group_policy_attachment" "elasticseachPolicyAttach" {
   count      = "${var.env=="dev" ? 1 : 0}"
   group      = "${aws_iam_group.developGroup.name}"
   policy_arn = "${var.elasticsearchPolicyArn}"
+  depends_on = ["aws_iam_group.developGroup"]
+}
+
+resource "aws_iam_group_policy_attachment" "dynamoDBPolicyAttach" {
+  count      = "${var.env=="dev" ? 1 : 0}"
+  group      = "${aws_iam_group.developGroup.name}"
+  policy_arn = "${var.dynamoDBPolicyArn}"
   depends_on = ["aws_iam_group.developGroup"]
 }
