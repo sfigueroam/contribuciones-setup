@@ -117,6 +117,7 @@ module "runtimePermissionPolicy" {
   source = "./permission/policy"
   appName = "${var.appName}"
   appPrefix = "${var.appPrefix}"
+  env = "${var.env}"
   account = "${var.account}"
   frontBucketID = "${module.runtimeS3Buckets.frontBucketID}"
   parseBucketID = "${module.runtimeS3Buckets.parseBucketID}"
@@ -142,6 +143,14 @@ module "runtimeElasticSearch" {
   account = "${var.account}"
   env = "${var.env}"
 }
+
+module "runtimeDynamodb" {
+  source = "./resource/dynamodb"
+  env = "${var.env}"
+  appPrefix = "${var.appPrefix}"
+  appName = "${var.appName}"
+}
+
 
 output "outContribClientID" {
   value = "${module.runtimeCognitoAppClients.contribClientID}"

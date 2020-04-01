@@ -27,6 +27,10 @@ variable "direccionesBucketID" {
 }
 
 
+variable "env" {
+  type = "string"
+}
+
 data "aws_region" "current" {
 }
 
@@ -92,6 +96,17 @@ data "aws_iam_policy_document" "ec2LambdaDataPolicy" {
     ]
     resources = [
       "arn:aws:lambda:*:*:function:${var.appPrefix}-elasticDirecciones"]
+  }
+  
+  statement {
+    sid = "stmDynamodb"
+    actions = [
+      "dynamodb:*"
+    ]
+    resources = [
+      "arn:aws:dynamodb:us-east-1:*:table/tgr-${var.env}-contribuciones*",
+      "arn:aws:dynamodb:us-east-1:*:table/tgr-${var.env}-contribuciones*/index/*"
+    ]
   }
 }
 
