@@ -77,8 +77,7 @@ data "aws_iam_policy_document" "serverlessDataPolicy" {
       "iam:PutRolePolicy",
       "lambda:UpdateFunctionCode",
       "lambda:UpdateFunctionConfiguration",
-      "s3:PutObject",
-
+      "s3:PutObject"
     ]
     resources = [
       "arn:aws:cloudformation:*:*:stack/${var.appPrefix}*/*",
