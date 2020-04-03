@@ -26,6 +26,10 @@ variable "elasticsearchPolicy" {
   type = "string"
 }
 
+variable "lambdaPolicyArn"{
+  type = "string"
+}
+
 data "aws_iam_policy_document" "ec2DataRole" {
   statement {
     actions = [
@@ -80,6 +84,9 @@ data "aws_iam_policy_document" "lambdaDataRole" {
   }
 }
 
+
+
+
 resource "aws_iam_role" "lambdaRole" {
   name = "${var.appPrefix}-back-lambda"
   assume_role_policy = "${data.aws_iam_policy_document.lambdaDataRole.json}"
@@ -87,6 +94,15 @@ resource "aws_iam_role" "lambdaRole" {
     Application = "${var.appName}"
     Env = "${var.env}"
   }
+}
+
+
+
+resource "aws_iam_role_policy_attachment" "lambdaRoleAttach" {
+  role = "${aws_iam_role.lambdaRole.name}"
+  policy_arn = "${var.lambdaPolicyArn}"
+  depends_on = [
+    "aws_iam_role.lambdaRole"]
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatchRoleAttach" {

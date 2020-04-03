@@ -134,6 +134,7 @@ module "runtimePermissionRole" {
   bucketsPolicy = "${module.runtimePermissionPolicy.bucketsPolicyArn}"
   ec2LambdaPolicy = "${module.runtimePermissionPolicy.ec2LambdaPolicyArn}"
   elasticsearchPolicy = "${module.runtimePermissionPolicy.elasticsearchPolicyArn}"
+  lambdaPolicyArn = "${module.runtimePermissionPolicy.lambdaPolicyArn}"
 }
 
 module "runtimeElasticSearch" {

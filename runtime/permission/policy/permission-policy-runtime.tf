@@ -88,6 +88,22 @@ resource "aws_iam_policy" "bucketPolicy" {
   policy = "${data.aws_iam_policy_document.bucketDataPolicy.json}"
 }
 
+
+
+data "aws_iam_policy_document" "lambdaDataPolicy" {
+  
+  statement {
+    sid = "stmtDynamoDB"
+    actions = [
+      "dynamodb:*"
+    ]
+    resources = [
+      "arn:aws:dynamodb:us-east-1:*:table/${var.appPrefix}*",
+      "arn:aws:dynamodb:us-east-1:*:table/${var.appPrefix}*/index/*"
+    ]
+  }
+}
+
 data "aws_iam_policy_document" "ec2LambdaDataPolicy" {
   statement {
     sid = "invokeFuntionDirecciones"
@@ -98,16 +114,7 @@ data "aws_iam_policy_document" "ec2LambdaDataPolicy" {
       "arn:aws:lambda:*:*:function:${var.appPrefix}-elasticDirecciones"]
   }
   
-  statement {
-    sid = "stmDynamodb"
-    actions = [
-      "dynamodb:*"
-    ]
-    resources = [
-      "arn:aws:dynamodb:us-east-1:*:table/tgr-${var.env}-contribuciones*",
-      "arn:aws:dynamodb:us-east-1:*:table/tgr-${var.env}-contribuciones*/index/*"
-    ]
-  }
+
 }
 
 resource "aws_iam_policy" "ec2LambdaPolicy" {
@@ -115,6 +122,13 @@ resource "aws_iam_policy" "ec2LambdaPolicy" {
   path = "/"
   description = "Otorga privilegios para la ejecutar lambda direcciones"
   policy = "${data.aws_iam_policy_document.ec2LambdaDataPolicy.json}"
+}
+
+resource "aws_iam_policy" "lambdaPolicy" {
+  name = "${var.appPrefix}-back-lambda"
+  path = "/"
+  description = "Otorga privilegios de ejecución de lambdas"
+  policy = "${data.aws_iam_policy_document.lambdaDataPolicy.json}"
 }
 
 data "aws_iam_policy_document" "elasticsearchDataPolicy" {
@@ -126,6 +140,7 @@ data "aws_iam_policy_document" "elasticsearchDataPolicy" {
     resources = [
       "arn:aws:es:${data.aws_region.current.name}:${var.account}:domain/${var.appPrefix}"]
   }
+  
 }
 
 resource "aws_iam_policy" "elasticsearchPolicy" {
@@ -149,4 +164,8 @@ output "ec2LambdaPolicyArn" {
 
 output "elasticsearchPolicyArn" {
   value = "${aws_iam_policy.elasticsearchPolicy.arn}"
+}
+
+output "lambdaPolicyArn" {
+  value = "${aws_iam_policy.lambdaPolicy.arn}"
 }
