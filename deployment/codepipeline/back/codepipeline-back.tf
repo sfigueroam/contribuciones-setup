@@ -475,7 +475,6 @@ resource "aws_codebuild_project" "codebuildBack" {
     environment_variable {
       name = "BUILD_BENEFICIOS_TABLE_NAME"
       value = "${var.beneficiosTableName}"
-      type = "PARAMETER_STORE"
     }
   }
 
