@@ -114,6 +114,10 @@ variable "lambdaDireccionesRoleArn" {
   type = "string"
 }
 
+variable "beneficiosTableName" {
+  type = "string"
+}
+
 locals {
   cBuildRoleFront = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codebuild"
   cPipelineRoleBack = "arn:aws:iam::${var.account}:role/tgr-${var.env}-project-setup-codepipeline"
@@ -188,6 +192,7 @@ module "deploymentCodepipelineBack" {
   kmsKey = "${var.env=="prod" || var.env=="stag" ? var.kmsKeyProd : var.kmsKeyDevQa}"
   roleArnGetCodecommit = "${var.roleArnGetCodecommit}"
   elasticsearchURL ="${var.elasticsearchEndpoint}"
+  beneficiosTableName = "${var.beneficiosTableName}"
 }
 
 module "deploymentCodepipelineDirecciones" {

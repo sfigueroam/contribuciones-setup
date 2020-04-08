@@ -143,6 +143,7 @@ module "deployment" {
   lambdaDireccionesRoleArn = "${module.runtime.arnLambdaDireccionesRole}"
   direccionesBucketID = "${module.runtime.direccionesBucketID}"
   elasticsearchEndpoint = "${local.direccionesElasticsearchDomainEndpoint}"
+  beneficiosTableName = "${module.runtime.beneficiosTableName}"
 }
 
 output "direccionesElasticsearchDomain" {

@@ -62,6 +62,10 @@ variable "elasticsearchURL" {
   type = "string"
 }
 
+variable "beneficiosTableName" {
+  type = "string"
+}
+
 variable "branch" {
   type = "map"
   default = {
@@ -465,6 +469,12 @@ resource "aws_codebuild_project" "codebuildBack" {
     environment_variable {
       name = "BUILD_WSA_HOST_TOKEN"
       value = "/tgr/${var.env}/${var.appName}/back/ws-nube/host-token"
+      type = "PARAMETER_STORE"
+    }
+    
+    environment_variable {
+      name = "BUILD_BENEFICIOS_TABLE_NAME"
+      value = "${var.beneficiosTableName}"
       type = "PARAMETER_STORE"
     }
   }

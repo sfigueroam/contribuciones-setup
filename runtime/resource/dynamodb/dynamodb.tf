@@ -26,19 +26,29 @@ resource "aws_dynamodb_table" "dynamodb-roles-exclusion-table" {
   }
 }
 
+resource "aws_dynamodb_table" "dynamodb-roles-exclusion-table2" {
+  name = "${var.appPrefix}-roles-beneficios"
+  billing_mode = "PAY_PER_REQUEST"
+  
+  hash_key = "rol"
+  range_key = "beneficio"
 
+  attribute {
+    name = "rol"
+    type = "S"
+  }
+  
+  attribute {
+    name = "beneficio"
+    type = "S"
+  }
 
-
-/*
-output "tableNameEstructura" {
-  value = "${aws_dynamodb_table.dynamodb-estructura-table.name}"
+  tags = {
+    Application = "${var.appName}"
+    Env = "${var.env}"
+  }
 }
 
-output "tableNamePresupuesto" {
-  value = "${aws_dynamodb_table.dynamodb-presupuesto-table.name}"
+output "beneficiosTableName" {
+  value = "${aws_dynamodb_table.dynamodb-roles-exclusion-table2.name}"
 }
-
-output "tableNameTransaccion" {
-  value = "${aws_dynamodb_table.dynamodb-transaccion-table.name}"
-}
-*/

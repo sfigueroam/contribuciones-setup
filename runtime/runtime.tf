@@ -217,3 +217,6 @@ output "elasticsearchDirectionsDomainArn" {
   value = "${module.runtimeElasticSearch.elasticsearchDirectionsDomainArn}"
 }
 
+output "beneficiosTableName" {
+  value = "${module.runtimeDynamodb.beneficiosTableName}"
+}
