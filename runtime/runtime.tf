@@ -1,3 +1,4 @@
+/*
 provider "aws" {
   alias = "prodDomainAccount"
   region = "us-east-1"
@@ -8,6 +9,7 @@ provider "aws" {
     external_id = "tgr-terraform-multi-cuenta"
   }
 }
+*/
 
 variable "appPrefix" {
   type = "string"
@@ -61,22 +63,16 @@ variable "cognitoPoolId" {
 variable "cognitoProviders" {
   type = "list"
 }
-
-variable "cognitoReadAttributes" {
-  type = "list"
-}
-
+/*
 module "runtimeCognitoAppClients" {
   source = "./resource/cognito"
   appPrefix = "${var.appPrefix}"
   cloudfrontAlias = "${var.appFrontSubdomain}.${var.appFrontDomain}"
-  cognitoReadAttributes = [
-    "${var.cognitoReadAttributes}"]
   cognitoPoolID = "${var.cognitoPoolId}"
   cognitoProviders = [
     "${var.cognitoProviders}"]
 }
-
+*/
 module "runtimeS3Buckets" {
   source = "./resource/s3-bucket"
   appPrefix = "${var.appPrefix}"
@@ -93,9 +89,11 @@ module "runtimeApiGateway" {
 
 module "runtimeCloudfront" {
   source = "./resource/cloudfront"
+  /*
   providers = {
     aws = "aws.prodDomainAccount"
   }
+  */
   appName = "${var.appName}"
   env = "${var.env}"
   bucketWebsiteEndpoint = "${module.runtimeS3Buckets.frontBucketWebsiteEndpoint}"
@@ -152,7 +150,21 @@ module "runtimeDynamodb" {
   appName = "${var.appName}"
 }
 
+//TODO: Se comenta cognito y sus outputs
 
+output "outContribClientID" {
+  value = "outContribClientID"
+}
+
+output "contribRedirectUri" {
+  value = "https://test.cl/test"
+}
+
+output "contribLogoutUri" {
+  value = "https://test.cl/test"
+}
+
+/*
 output "outContribClientID" {
   value = "${module.runtimeCognitoAppClients.contribClientID}"
 }
@@ -164,6 +176,9 @@ output "contribRedirectUri" {
 output "contribLogoutUri" {
   value = "${module.runtimeCognitoAppClients.contribLogoutUri}"
 }
+*/
+
+
 
 output "outCloufrontDomainName" {
   value = "${module.runtimeCloudfront.cloudfrontDomainName}"

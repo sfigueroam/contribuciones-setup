@@ -135,7 +135,7 @@ data "aws_iam_policy_document" "elasticsearchDataPolicy" {
   statement {
     sid = "elasticsearchAccess"
     actions = [
-      "es:ES*"
+      "es:*"
     ]
     resources = [
       "arn:aws:es:${data.aws_region.current.name}:${var.account}:domain/${var.appPrefix}"]

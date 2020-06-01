@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "elasticSearchAccessDataPolicy" {
 }
 
 resource "aws_elasticsearch_domain" "elasticsearchDirectionsDomain" {
-  count  = "${var.env=="stag" || var.env=="dev" ? 0 : 1}"
+  count  = "${var.env=="stag" || var.env=="dev" || var.env=="env-0529" ? 0 : 1}"
   domain_name="${var.appPrefix}"
   elasticsearch_version="6.3"
   access_policies="${data.aws_iam_policy_document.elasticSearchAccessDataPolicy.json}"

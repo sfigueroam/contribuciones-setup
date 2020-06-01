@@ -14,11 +14,6 @@ variable "cognitoProviders" {
   type = "list"
 }
 
-variable "cognitoReadAttributes" {
-  type = "list"
-}
-
-
 resource "aws_cognito_user_pool_client" "appClient" {
   name = "${var.appPrefix}"
 

@@ -64,12 +64,6 @@ variable "kmsKey" {
 
 variable "branch" {
   type = "map"
-  default = {
-    "prod" = "master"
-    "stag" = "staging"
-    "dev" = "develop"
-    "qa" = "release"
-  }
 }
 
 resource "aws_ssm_parameter" "front-cuenta-usuario-url" {

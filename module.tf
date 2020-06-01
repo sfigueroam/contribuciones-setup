@@ -3,11 +3,6 @@ provider "aws" {
   version = "~> 1.57"
 }
 
-variable "account" {
-  type = "string"
-  description = "Numero de la cuenta."
-}
-
 variable "frontAccount" {
   type = "string"
   description = "Numero de la cuenta donde se configurará Route53 y Cloudfront."
@@ -28,40 +23,7 @@ variable "appFrontSubdomain" {
   description = "Subdominio desde donde se accedera el frontend. Ejemplo: www"
 }
 
-variable "appFrontDomain" {
-  type = "string"
-  description = "Dominio desde donde se accedera el frontend. Ejemplo: tgr.cl"
-}
-
-variable "route53ZoneId" {
-  type = "string"
-}
-
-variable "acmCertificateArn" {
-  type = "string"
-}
-
-variable "cognitoPoolId" {
-  type = "string"
-}
-
-variable "cognitoPoolArn" {
-  type = "string"
-}
-
-variable "cognitoAuthorizeURL" {
-  type = "string"
-}
-
-variable "cognitoLogoutURL" {
-  type = "string"
-}
-
 variable "cognitoProviders" {
-  type = "list"
-}
-
-variable "cognitoReadAttributes" {
   type = "list"
 }
 
@@ -75,15 +37,76 @@ variable "direccionesElasticsearchDomain" {
   default = "search-tgr-qa-contribuciones-hsco4tfnkz2jfjpxxv3znhxnqu.us-east-1.es.amazonaws.com"
 }
 
+data "aws_ssm_parameter" "kms_key_arn" {
+  name = "/tgr/common/kms-key-arn"
+}
+
+data "aws_ssm_parameter" "acm_certificate_arn" {
+  name = "/tgr/common/acm-certificate-arn"
+}
+
+data "aws_ssm_parameter" "front_domain" {
+  name = "/tgr/common/front-domain"
+}
+
+data "aws_ssm_parameter" "zone_id_domain" {
+  name = "/tgr/common/zone-id-domain"
+}
+
+data "aws_ssm_parameter" "cognito_pool_id" {
+  name = "/tgr/common/cognito-pool-id"
+}
+
+data "aws_ssm_parameter" "cognito_pool_arn" {
+  name = "/tgr/common/cognito-pool-arn"
+}
+
+data "aws_ssm_parameter" "cognito_logout_url" {
+  name = "/tgr/common/cognito-logout-url"
+}
+
+data "aws_ssm_parameter" "cognito_authorize_url" {
+  name = "/tgr/common/cognito-authorize-url"
+}
+
+data "aws_ssm_parameter" "pipeline_bucket_name" {
+  name = "/tgr/common/pipeline-bucket-name"
+}
+
+data "aws_ssm_parameter" "pipeline_role_arn" {
+  name = "/tgr/common/pipeline-role-arn"
+}
+
+data "aws_ssm_parameter" "build_role_arn" {
+  name = "/tgr/common/build-role-arn"
+}
+
+data "aws_ssm_parameter" "repository_role_arn" {
+  name = "/tgr/common/repository-role-arn"
+}
+
+data "aws_ssm_parameter" "codecommit_account" {
+  name = "/tgr/common/codecommit-account"
+}
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "get_account" {}
+
 locals {
   appPrefix = "tgr-${var.env}-${var.appName}"
   repositoryFront = "${var.appName}-front"
   repositoryBack = "${var.appName}-back"
   repositoryDirecciones = "${var.appName}-direcciones"
   direccionesElasticsearchDomainEndpoint = "${var.direccionesElasticsearchDomain =="" ? module.runtime.elasticsearchDirectionsDomainEndpoint: var.direccionesElasticsearchDomain}"
+  branchMap = {
+    "prod" = "master"
+    "stag" = "staging"
+    "dev" = "develop"
+    "env" = "release"
+    "qa" = "release"
+    "env-0529" = "release"
+  }
 }
-
-data "aws_region" "current" {}
 
 module "runtime" {
   source = "./runtime"
@@ -91,22 +114,20 @@ module "runtime" {
   appName = "${var.appName}"
   env = "${var.env}"
   frontAccount = "${var.frontAccount}"
-  account = "${var.account}"
+  account = "${data.aws_caller_identity.get_account.account_id}"
   appFrontSubdomain = "${var.appFrontSubdomain}"
-  appFrontDomain = "${var.appFrontDomain}"
-  cognitoPoolId = "${var.cognitoPoolId}"
+  appFrontDomain = "${data.aws_ssm_parameter.front_domain.value}"
+  cognitoPoolId = "${data.aws_ssm_parameter.cognito_pool_id.value}"
   cognitoProviders = [
     "${var.cognitoProviders}"]
-  cognitoReadAttributes = [
-    "${var.cognitoReadAttributes}"]
-  acmCertificateArn = "${var.acmCertificateArn}"
-  route53ZoneId = "${var.route53ZoneId}"
+  acmCertificateArn = "${data.aws_ssm_parameter.acm_certificate_arn.value}"
+  route53ZoneId = "${data.aws_ssm_parameter.zone_id_domain.value}"
   region = "${data.aws_region.current.name}"
 }
 
 module "governance" {
   source = "./governance"
-  account = "${var.account}"
+  account = "${data.aws_caller_identity.get_account.account_id}"
   appPrefix = "${local.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
@@ -119,15 +140,15 @@ module "governance" {
 
 module "deployment" {
   source = "./deployment"
-  account = "${var.account}"
+  account = "${data.aws_caller_identity.get_account.account_id}"
   appPrefix = "${local.appPrefix}"
   appName = "${var.appName}"
   env = "${var.env}"
   apiGatewayID = "${module.runtime.apiGatewayID}"
   apiGatewayRootID = "${module.runtime.apiGatewayRootID}"
-  cognitoPoolArn = "${var.cognitoPoolArn}"
-  cognitoAuthorizeURL = "${var.cognitoAuthorizeURL}"
-  cognitoLogoutURL = "${var.cognitoLogoutURL}"
+  cognitoPoolArn = "${data.aws_ssm_parameter.cognito_pool_arn.value}"
+  cognitoAuthorizeURL = "${data.aws_ssm_parameter.cognito_authorize_url.value}"
+  cognitoLogoutURL = "${data.aws_ssm_parameter.cognito_logout_url.value}"
   cognitoContribClientId = "${module.runtime.outContribClientID}"
   cognitoContribRedirectURI = "${module.runtime.contribRedirectUri}"
   cognitoContribLogoutURI = "${module.runtime.contribLogoutUri}"
@@ -144,6 +165,12 @@ module "deployment" {
   direccionesBucketID = "${module.runtime.direccionesBucketID}"
   elasticsearchEndpoint = "${local.direccionesElasticsearchDomainEndpoint}"
   beneficiosTableName = "${module.runtime.beneficiosTableName}"
+  buildRoleArn = "${data.aws_ssm_parameter.build_role_arn.value}"
+  pipelineBucketName = "${data.aws_ssm_parameter.pipeline_bucket_name.value}"
+  pipelineRoleArn = "${data.aws_ssm_parameter.pipeline_role_arn.value}"
+  roleArnGetCodecommit = "${data.aws_ssm_parameter.repository_role_arn.value}"
+  branchMap = "${local.branchMap}"
+  kmsKeyArn = "${data.aws_ssm_parameter.kms_key_arn.value}"
 }
 
 output "direccionesElasticsearchDomain" {

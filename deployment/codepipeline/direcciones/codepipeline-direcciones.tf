@@ -48,12 +48,6 @@ variable "lambdaDireccionesRoleArn" {
 
 variable "branch" {
   type = "map"
-  default = {
-    "stag" = "staging"
-    "prod" = "master"
-    "dev" = "develop"
-    "qa" = "release"
-  }
 }
 
 resource "aws_codebuild_project" "codebuildDirecciones" {
